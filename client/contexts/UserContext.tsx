@@ -5,7 +5,9 @@ import { Country } from '../lib/countries';
 interface UserContextType {
   user: User | null;
   userName: string;
+  userCountry: Country | null;
   setUserName: (name: string) => Promise<void>;
+  setUserCountry: (country: Country) => Promise<void>;
   isLoading: boolean;
   userBestScore: number;
   refreshUserBestScore: () => Promise<void>;
