@@ -223,4 +223,29 @@ export class Database {
       return 0;
     }
   }
+
+  // Update user information
+  static async updateUser(userId: string, updates: Partial<User>): Promise<boolean> {
+    if (!supabase) {
+      console.warn('Supabase not configured - user update not saved');
+      return true;
+    }
+
+    try {
+      const { error } = await supabase
+        .from('users')
+        .update(updates)
+        .eq('id', userId);
+
+      if (error) {
+        console.error('Error updating user:', JSON.stringify(error, null, 2));
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      console.error('Error in updateUser:', error);
+      return false;
+    }
+  }
 }
