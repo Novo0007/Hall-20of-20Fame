@@ -93,7 +93,9 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
       value={{
         user,
         userName,
+        userCountry,
         setUserName,
+        setUserCountry,
         isLoading,
         userBestScore,
         refreshUserBestScore,
