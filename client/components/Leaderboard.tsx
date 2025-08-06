@@ -7,6 +7,7 @@ export const Leaderboard: React.FC = () => {
   const [scores, setScores] = useState<Score[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useUser();
+  const { isDark } = useTheme();
 
   useEffect(() => {
     loadLeaderboard();
