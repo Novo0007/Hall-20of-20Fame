@@ -84,7 +84,7 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
   }, [isDrawing, getEventPosition]);
 
   const stopDrawing = useCallback(async () => {
-    if (!isDrawing || points.length < 10) {
+    if (!isDrawing || points.length < 5) {
       setIsDrawing(false);
       return;
     }
