@@ -155,6 +155,10 @@ export class Database {
 
   // Get user's best score
   static async getUserBestScore(userId: string): Promise<number> {
+    if (!supabase) {
+      return 0;
+    }
+
     try {
       const { data, error } = await supabase
         .from('scores')
