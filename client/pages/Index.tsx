@@ -1,5 +1,5 @@
-import { PerfectCircle } from '../components/PerfectCircle';
+import { GamePage } from '../components/GamePage';
 
 export default function Index() {
-  return <PerfectCircle />;
+  return <GamePage />;
 }
