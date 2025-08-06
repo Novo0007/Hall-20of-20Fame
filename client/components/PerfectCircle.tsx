@@ -291,7 +291,11 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
       </div>
 
       {showResult && score !== null && (
-        <div className="bg-white rounded-2xl shadow-xl p-6 border border-slate-200 mb-6 max-w-md mx-auto">
+        <div className={`rounded-2xl shadow-xl p-6 border mb-6 max-w-md mx-auto transition-colors duration-300 ${
+          isDark
+            ? 'bg-gray-800 border-gray-700'
+            : 'bg-white border-slate-200'
+        }`}>
           <div className="text-center">
             <div className={`text-5xl sm:text-6xl font-bold mb-4 ${getScoreColor(score)}`}>
               {score.toFixed(1)}%
@@ -299,12 +303,14 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
 
             {/* Rating Bar 0-100% */}
             <div className="w-full mb-4">
-              <div className="flex justify-between text-xs text-slate-500 mb-2">
+              <div className={`flex justify-between text-xs mb-2 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                 <span>0%</span>
                 <span className="font-medium">Accuracy</span>
                 <span>100%</span>
               </div>
-              <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden shadow-inner">
+              <div className={`w-full rounded-full h-3 overflow-hidden shadow-inner ${
+                isDark ? 'bg-gray-700' : 'bg-slate-100'
+              }`}>
                 <div
                   className={`h-full transition-all duration-1000 ease-out shadow-sm ${
                     score >= 90 ? 'bg-gradient-to-r from-green-400 to-green-500' :
@@ -314,7 +320,7 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
                   style={{ width: `${score}%` }}
                 />
               </div>
-              <div className="flex justify-between text-xs text-slate-400 mt-1">
+              <div className={`flex justify-between text-xs mt-1 ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
                 <span>Poor</span>
                 <span>Good</span>
                 <span>Perfect</span>
@@ -322,7 +328,7 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
             </div>
 
             <div className="space-y-3">
-              <p className="text-lg sm:text-xl font-semibold text-slate-800">
+              <p className={`text-lg sm:text-xl font-semibold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
                 {getScoreMessage(score)}
                 {isNewBest && (
                   <span className="block mt-2">
@@ -335,13 +341,13 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
               </p>
 
               {isSubmittingScore && (
-                <p className="text-slate-600 text-sm flex items-center justify-center space-x-2">
+                <p className={`text-sm flex items-center justify-center space-x-2 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
                   <span className="w-3 h-3 border-2 border-purple-500 border-t-transparent rounded-full animate-spin"></span>
                   <span>Saving...</span>
                 </p>
               )}
 
-              <p className="text-slate-500 text-xs">
+              <p className={`text-xs ${isDark ? 'text-slate-500' : 'text-slate-500'}`}>
                 Green line shows perfect circle
               </p>
             </div>
