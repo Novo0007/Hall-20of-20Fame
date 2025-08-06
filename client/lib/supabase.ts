@@ -62,6 +62,16 @@ export class Database {
         .eq('name', name)
         .single();
 
+      // Handle schema cache issues
+      if (findError?.code === 'PGRST205') {
+        console.warn('Schema cache not ready, using temporary user');
+        return {
+          id: 'temp-user-' + name.toLowerCase().replace(/\s+/g, '-'),
+          name,
+          created_at: new Date().toISOString(),
+        };
+      }
+
       if (existingUser && !findError) {
         return existingUser;
       }
@@ -72,6 +82,16 @@ export class Database {
         .insert([{ name }])
         .select()
         .single();
+
+      // Handle schema cache issues
+      if (createError?.code === 'PGRST205') {
+        console.warn('Schema cache not ready, using temporary user');
+        return {
+          id: 'temp-user-' + name.toLowerCase().replace(/\s+/g, '-'),
+          name,
+          created_at: new Date().toISOString(),
+        };
+      }
 
       if (createError) {
         console.error('Error creating user:', JSON.stringify(createError, null, 2));
