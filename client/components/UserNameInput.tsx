@@ -35,7 +35,7 @@ export const UserNameInput: React.FC = () => {
         ? 'bg-gray-800 border-gray-700'
         : 'bg-white border-slate-200'
     }`}>
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-6">
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
             <span className="text-white text-sm">👤</span>
@@ -43,6 +43,11 @@ export const UserNameInput: React.FC = () => {
           <span className={`font-medium ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>
             Player Profile
           </span>
+          {userCountry && (
+            <div className="flex items-center space-x-1 ml-2">
+              <span className="text-lg">{userCountry.flag}</span>
+            </div>
+          )}
         </div>
         {userBestScore > 0 && (
           <div className="text-right">
