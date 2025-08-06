@@ -40,17 +40,48 @@ export const Leaderboard: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
-      <div className="bg-card border border-border rounded-lg p-6">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-foreground">🏆 Leaderboard</h2>
-          <button
-            onClick={loadLeaderboard}
-            disabled={isLoading}
-            className="px-3 py-1 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/90 disabled:opacity-50"
-          >
-            {isLoading ? '⟳' : '🔄'}
-          </button>
+    <div className="w-full max-w-4xl mx-auto px-4">
+      {/* Header */}
+      <div className="text-center mb-12">
+        <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-yellow-100 to-orange-100 px-4 py-2 rounded-full mb-6">
+          <span className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></span>
+          <span className="text-slate-700 text-sm font-medium">Global Competition</span>
+        </div>
+        <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-yellow-600 via-orange-600 to-red-600 bg-clip-text text-transparent mb-4">
+          🏆 Leaderboard
+        </h1>
+        <p className="text-slate-600 text-lg md:text-xl">
+          Top 10 Perfect Circle Masters
+        </p>
+      </div>
+
+      <div className="bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden">
+        <div className="bg-gradient-to-r from-yellow-500 to-orange-500 p-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                <span className="text-white text-2xl">👑</span>
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-white">Hall of Fame</h2>
+                <p className="text-orange-100">Highest scoring players worldwide</p>
+              </div>
+            </div>
+            <button
+              onClick={loadLeaderboard}
+              disabled={isLoading}
+              className="px-4 py-2 bg-white/20 text-white rounded-xl hover:bg-white/30 disabled:opacity-50 transition-all duration-200 backdrop-blur-sm"
+            >
+              {isLoading ? (
+                <span className="flex items-center space-x-2">
+                  <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                  <span>Loading</span>
+                </span>
+              ) : (
+                '🔄 Refresh'
+              )}
+            </button>
+          </div>
         </div>
 
         {isLoading ? (
