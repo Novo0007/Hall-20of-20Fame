@@ -62,7 +62,11 @@ export const UserNameInput: React.FC = () => {
             value={tempName}
             onChange={(e) => setTempName(e.target.value)}
             onKeyDown={handleKeyPress}
-            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
+            className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 ${
+              isDark
+                ? 'bg-gray-700 border-gray-600 text-slate-200 placeholder-slate-400'
+                : 'bg-slate-50 border-slate-200 text-slate-800 placeholder-slate-500'
+            }`}
             placeholder="Enter your display name"
             maxLength={20}
             autoFocus
@@ -84,7 +88,11 @@ export const UserNameInput: React.FC = () => {
             </button>
             <button
               onClick={handleCancel}
-              className="px-4 py-2 bg-slate-200 text-slate-700 rounded-xl font-medium hover:bg-slate-300 transition-all duration-200"
+              className={`px-4 py-2 rounded-xl font-medium transition-all duration-200 ${
+                isDark
+                  ? 'bg-gray-600 text-slate-200 hover:bg-gray-500'
+                  : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+              }`}
             >
               ✕ Cancel
             </button>
@@ -93,8 +101,12 @@ export const UserNameInput: React.FC = () => {
       ) : (
         <div className="flex items-center justify-between">
           <div>
-            <div className="text-xl font-semibold text-slate-800">{userName}</div>
-            <div className="text-sm text-slate-500">Tap to change name</div>
+            <div className={`text-xl font-semibold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+              {userName}
+            </div>
+            <div className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+              Tap to change name
+            </div>
           </div>
           <button
             onClick={() => {
