@@ -33,10 +33,10 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate, userBes
           </div>
 
           {/* Navigation */}
-          <nav className="flex items-center space-x-2 sm:space-x-4">
+          <nav className="flex items-center space-x-2">
             <button
               onClick={() => onNavigate('game')}
-              className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+              className={`px-2 sm:px-3 py-2 rounded-lg font-medium transition-all duration-200 text-sm ${
                 currentView === 'game'
                   ? 'bg-white text-slate-900 shadow-lg'
                   : 'text-white hover:bg-white/10'
@@ -47,7 +47,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate, userBes
             </button>
             <button
               onClick={() => onNavigate('leaderboard')}
-              className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+              className={`px-2 sm:px-3 py-2 rounded-lg font-medium transition-all duration-200 text-sm ${
                 currentView === 'leaderboard'
                   ? 'bg-white text-slate-900 shadow-lg'
                   : 'text-white hover:bg-white/10'
@@ -55,6 +55,15 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate, userBes
             >
               <span className="hidden sm:inline">🏆 Leaderboard</span>
               <span className="sm:hidden">🏆</span>
+            </button>
+
+            {/* Dark Mode Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="px-2 sm:px-3 py-2 rounded-lg font-medium transition-all duration-200 text-white hover:bg-white/10"
+              title={`Switch to ${isDark ? 'light' : 'dark'} mode`}
+            >
+              <span className="text-lg">{isDark ? '☀️' : '🌙'}</span>
             </button>
           </nav>
 
