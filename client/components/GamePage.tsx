@@ -4,6 +4,7 @@ import { Leaderboard } from './Leaderboard';
 import { UserNameInput } from './UserNameInput';
 import { Header } from './Header';
 import { UserProvider, useUser } from '../contexts/UserContext';
+import { ThemeProvider, useTheme } from '../contexts/ThemeContext';
 import { isSupabaseEnabled } from '../lib/supabase';
 
 type View = 'game' | 'leaderboard';
