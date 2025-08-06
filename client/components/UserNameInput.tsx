@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useUser } from '../contexts/UserContext';
 import { useTheme } from '../contexts/ThemeContext';
+import { CountrySelector } from './CountrySelector';
 
 export const UserNameInput: React.FC = () => {
   const { userName, setUserName, isLoading, userBestScore } = useUser();
