@@ -30,15 +30,27 @@ interface UserProviderProps {
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [userName, setUserNameState] = useState<string>('Anonymous');
+  const [userCountry, setUserCountryState] = useState<Country | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [userBestScore, setUserBestScore] = useState<number>(0);
 
-  // Load user name from localStorage on mount
+  // Load user data from localStorage on mount
   useEffect(() => {
     const savedName = localStorage.getItem('perfect-circle-username');
+    const savedCountry = localStorage.getItem('perfect-circle-country');
+
     if (savedName) {
       setUserNameState(savedName);
       handleUserNameChange(savedName);
+    }
+
+    if (savedCountry) {
+      try {
+        const country = JSON.parse(savedCountry) as Country;
+        setUserCountryState(country);
+      } catch (error) {
+        console.error('Failed to parse saved country:', error);
+      }
     }
   }, []);
 
