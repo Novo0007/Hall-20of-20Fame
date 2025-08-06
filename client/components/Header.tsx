@@ -38,7 +38,7 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
             <div>
               <h1 className="text-lg sm:text-xl font-bold text-white">
-                Perfect Circle
+                Perfect Circle: Hall of Fame
               </h1>
               <p className="text-purple-200 text-xs hidden sm:block">
                 Master the Art of Precision
