@@ -85,6 +85,30 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const setUserCountry = async (country: Country) => {
     setUserCountryState(country);
     localStorage.setItem('perfect-circle-country', JSON.stringify(country));
+
+    // Update user in database if user exists
+    if (user) {
+      setIsLoading(true);
+      try {
+        await Database.updateUser(user.id, {
+          country_code: country.code,
+          country_name: country.name,
+          country_flag: country.flag,
+        });
+
+        // Update local user state
+        setUser(prev => prev ? {
+          ...prev,
+          country_code: country.code,
+          country_name: country.name,
+          country_flag: country.flag,
+        } : null);
+      } catch (error) {
+        console.error('Error updating user country:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
   };
 
   const refreshUserBestScore = async () => {
