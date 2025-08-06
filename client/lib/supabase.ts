@@ -129,7 +129,7 @@ export class Database {
         .order('score', { ascending: false });
 
       if (error) {
-        console.error('Error fetching leaderboard:', error);
+        console.error('Error fetching leaderboard:', JSON.stringify(error, null, 2));
         return [];
       }
 
