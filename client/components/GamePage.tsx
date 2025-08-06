@@ -42,14 +42,11 @@ export const GamePage: React.FC = () => {
         
         {/* Database Connection Status */}
         <div className="fixed bottom-4 right-4 text-xs text-muted-foreground bg-card border border-border rounded-lg px-3 py-2">
-          {(() => {
-            const { isSupabaseEnabled } = require('../lib/supabase');
-            return isSupabaseEnabled ? (
-              <span className="text-green-400">● Connected to Supabase</span>
-            ) : (
-              <span className="text-orange-400">⚠ Configure Supabase to save scores</span>
-            );
-          })()}
+          {isSupabaseEnabled ? (
+            <span className="text-green-400">● Connected to Supabase</span>
+          ) : (
+            <span className="text-orange-400">⚠ Configure Supabase to save scores</span>
+          )}
         </div>
       </div>
     </UserProvider>
