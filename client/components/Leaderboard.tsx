@@ -56,29 +56,32 @@ export const Leaderboard: React.FC = () => {
       </div>
 
       <div className="bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden">
-        <div className="bg-gradient-to-r from-yellow-500 to-orange-500 p-6">
+        <div className="bg-gradient-to-r from-yellow-500 to-orange-500 p-4 sm:p-6">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                <span className="text-white text-2xl">👑</span>
+            <div className="flex items-center space-x-2 sm:space-x-3">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                <span className="text-white text-xl sm:text-2xl">👑</span>
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white">Hall of Fame</h2>
-                <p className="text-orange-100">Highest scoring players worldwide</p>
+                <h2 className="text-lg sm:text-2xl font-bold text-white">Hall of Fame</h2>
+                <p className="text-orange-100 text-xs sm:text-sm">Top scoring players</p>
               </div>
             </div>
             <button
               onClick={loadLeaderboard}
               disabled={isLoading}
-              className="px-4 py-2 bg-white/20 text-white rounded-xl hover:bg-white/30 disabled:opacity-50 transition-all duration-200 backdrop-blur-sm"
+              className="px-3 py-2 bg-white/20 text-white rounded-lg hover:bg-white/30 disabled:opacity-50 transition-all duration-200 backdrop-blur-sm text-sm"
             >
               {isLoading ? (
-                <span className="flex items-center space-x-2">
-                  <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                  <span>Loading</span>
+                <span className="flex items-center space-x-1">
+                  <span className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                  <span className="hidden sm:inline">Loading</span>
                 </span>
               ) : (
-                '🔄 Refresh'
+                <span className="flex items-center space-x-1">
+                  <span>🔄</span>
+                  <span className="hidden sm:inline">Refresh</span>
+                </span>
               )}
             </button>
           </div>
