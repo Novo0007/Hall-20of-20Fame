@@ -27,7 +27,7 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
     if (drawnPoints.length < 5) return 0;
 
     // Calculate the average radius
-    const radii = drawnPoints.map(point => 
+    const radii = drawnPoints.map(point =>
       Math.sqrt(Math.pow(point.x - center.x, 2) + Math.pow(point.y - center.y, 2))
     );
     const avgRadius = radii.reduce((sum, r) => sum + r, 0) / radii.length;
@@ -36,10 +36,21 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
     const deviations = radii.map(radius => Math.abs(radius - avgRadius));
     const avgDeviation = deviations.reduce((sum, d) => sum + d, 0) / deviations.length;
 
-    // Convert to a percentage score (lower deviation = higher score)
-    const maxAllowedDeviation = avgRadius * 0.1; // 10% of radius
-    const accuracy = Math.max(0, 100 - (avgDeviation / maxAllowedDeviation) * 100);
-    
+    // More forgiving scoring system
+    const relativeDeviation = avgDeviation / avgRadius; // 0 = perfect, 1 = very bad
+
+    // Convert to percentage (more generous curve)
+    let accuracy;
+    if (relativeDeviation <= 0.05) { // Very good (within 5%)
+      accuracy = 100 - (relativeDeviation / 0.05) * 10; // 90-100%
+    } else if (relativeDeviation <= 0.15) { // Good (5-15%)
+      accuracy = 90 - ((relativeDeviation - 0.05) / 0.10) * 30; // 60-90%
+    } else if (relativeDeviation <= 0.30) { // Okay (15-30%)
+      accuracy = 60 - ((relativeDeviation - 0.15) / 0.15) * 40; // 20-60%
+    } else { // Poor (30%+)
+      accuracy = Math.max(0, 20 - ((relativeDeviation - 0.30) / 0.20) * 20); // 0-20%
+    }
+
     return Math.min(100, Math.max(0, accuracy));
   }, []);
 
