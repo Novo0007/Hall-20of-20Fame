@@ -21,34 +21,60 @@ const GameContent: React.FC = () => {
       />
 
       {currentView === 'game' ? (
-        <div className="pt-8">
-          {/* User Name Input */}
-          <div className="flex justify-center mb-8">
-            <div className="w-full max-w-md px-4">
-              <UserNameInput />
+        <div className="pb-16">
+          {/* 1. Canvas First - Main Game Area */}
+          <div className="px-4 pt-4">
+            <PerfectCircle onShowLeaderboard={() => setCurrentView('leaderboard')} />
+          </div>
+
+          {/* 2. Quick Leaderboard Preview */}
+          <div className="px-4 mt-8">
+            <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-slate-800 flex items-center">
+                  <span className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-lg flex items-center justify-center mr-3">
+                    🏆
+                  </span>
+                  Quick Standings
+                </h3>
+                <button
+                  onClick={() => setCurrentView('leaderboard')}
+                  className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-medium hover:from-purple-600 hover:to-pink-600 transition-all duration-200 text-sm"
+                >
+                  View All
+                </button>
+              </div>
+              <div className="text-center py-4 text-slate-500">
+                <p className="text-sm">Tap "View All" to see the full leaderboard</p>
+              </div>
             </div>
           </div>
 
-          <PerfectCircle onShowLeaderboard={() => setCurrentView('leaderboard')} />
+          {/* 3. Player Profile Card - Bottom */}
+          <div className="px-4 mt-8">
+            <UserNameInput />
+          </div>
         </div>
       ) : (
-        <div className="pt-8 pb-16">
-          {/* User Name Input */}
-          <div className="flex justify-center mb-8">
-            <div className="w-full max-w-md px-4">
-              <UserNameInput />
-            </div>
+        <div className="pb-16">
+          {/* Leaderboard View */}
+          <div className="pt-4">
+            <Leaderboard />
           </div>
 
-          <Leaderboard />
-
-          <div className="flex justify-center mt-12">
+          {/* Back to Game Button */}
+          <div className="flex justify-center mt-8 px-4">
             <button
               onClick={() => setCurrentView('game')}
-              className="px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-2xl font-semibold hover:from-purple-600 hover:to-pink-600 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+              className="w-full max-w-md px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-2xl font-semibold hover:from-purple-600 hover:to-pink-600 transition-all duration-200 shadow-lg hover:shadow-xl"
             >
               🎯 Back to Game
             </button>
+          </div>
+
+          {/* Player Profile in Leaderboard View */}
+          <div className="px-4 mt-8">
+            <UserNameInput />
           </div>
         </div>
       )}
