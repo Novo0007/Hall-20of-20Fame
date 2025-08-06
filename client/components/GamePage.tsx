@@ -111,8 +111,10 @@ const GameContent: React.FC = () => {
 
 export const GamePage: React.FC = () => {
   return (
-    <UserProvider>
-      <GameContent />
-    </UserProvider>
+    <ThemeProvider>
+      <UserProvider>
+        <GameContent />
+      </UserProvider>
+    </ThemeProvider>
   );
 };
