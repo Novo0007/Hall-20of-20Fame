@@ -117,6 +117,12 @@ export class Database {
         .from('scores')
         .insert([{ user_id: userId, score }]);
 
+      // Handle schema cache issues
+      if (error?.code === 'PGRST205') {
+        console.warn('Schema cache not ready, score not saved yet');
+        return true; // Return true to not break the game flow
+      }
+
       if (error) {
         console.error('Error submitting score:', JSON.stringify(error, null, 2));
         return false;
