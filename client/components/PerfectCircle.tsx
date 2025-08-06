@@ -270,53 +270,61 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
       </div>
 
       {showResult && score !== null && (
-        <div className="text-center mb-6">
-          <div className={`text-6xl font-bold ${getScoreColor(score)} mb-4`}>
-            {score.toFixed(1)}%
+        <div className="bg-white rounded-3xl shadow-2xl p-8 border border-slate-200 mb-8 max-w-md mx-auto">
+          <div className="text-center">
+            <div className={`text-7xl font-bold mb-4 ${getScoreColor(score)}`}>
+              {score.toFixed(1)}%
+            </div>
+
+            {/* Rating Bar 0-100% */}
+            <div className="w-full mb-6">
+              <div className="flex justify-between text-xs text-slate-500 mb-2">
+                <span>0%</span>
+                <span className="font-medium">Accuracy Rate</span>
+                <span>100%</span>
+              </div>
+              <div className="w-full bg-slate-100 rounded-full h-4 overflow-hidden shadow-inner">
+                <div
+                  className={`h-full transition-all duration-1000 ease-out shadow-sm ${
+                    score >= 90 ? 'bg-gradient-to-r from-green-400 to-green-500' :
+                    score >= 70 ? 'bg-gradient-to-r from-yellow-400 to-yellow-500' :
+                    score >= 50 ? 'bg-gradient-to-r from-orange-400 to-orange-500' : 'bg-gradient-to-r from-red-400 to-red-500'
+                  }`}
+                  style={{ width: `${score}%` }}
+                />
+              </div>
+              <div className="flex justify-between text-xs text-slate-400 mt-2">
+                <span>Poor</span>
+                <span>Good</span>
+                <span>Perfect</span>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <p className="text-2xl font-semibold text-slate-800">
+                {getScoreMessage(score)}
+                {isNewBest && (
+                  <span className="block mt-2">
+                    <span className="inline-flex items-center space-x-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full text-sm font-medium">
+                      <span>🎉</span>
+                      <span>New Personal Best!</span>
+                    </span>
+                  </span>
+                )}
+              </p>
+
+              {isSubmittingScore && (
+                <p className="text-slate-600 text-sm flex items-center justify-center space-x-2">
+                  <span className="w-4 h-4 border-2 border-purple-500 border-t-transparent rounded-full animate-spin"></span>
+                  <span>Saving score...</span>
+                </p>
+              )}
+
+              <p className="text-slate-500 text-sm">
+                Green dashed line shows perfect circle
+              </p>
+            </div>
           </div>
-
-          {/* Rating Bar 0-100% */}
-          <div className="w-80 max-w-full mx-auto mb-4">
-            <div className="flex justify-between text-xs text-muted-foreground mb-1">
-              <span>0%</span>
-              <span>Rate</span>
-              <span>100%</span>
-            </div>
-            <div className="w-full bg-muted rounded-full h-3 overflow-hidden">
-              <div
-                className={`h-full transition-all duration-1000 ease-out ${
-                  score >= 90 ? 'bg-green-400' :
-                  score >= 70 ? 'bg-yellow-400' :
-                  score >= 50 ? 'bg-orange-400' : 'bg-red-400'
-                }`}
-                style={{ width: `${score}%` }}
-              />
-            </div>
-            <div className="flex justify-between text-xs text-muted-foreground mt-1">
-              <span>Poor</span>
-              <span>Good</span>
-              <span>Perfect</span>
-            </div>
-          </div>
-
-          <p className="text-xl text-foreground mb-1">
-            {getScoreMessage(score)}
-            {isNewBest && (
-              <span className="ml-2 text-sm bg-primary text-primary-foreground px-2 py-1 rounded-full">
-                New Best! 🎉
-              </span>
-            )}
-          </p>
-
-          {isSubmittingScore && (
-            <p className="text-sm text-muted-foreground mb-1">
-              Saving score...
-            </p>
-          )}
-
-          <p className="text-sm text-muted-foreground">
-            Green dashed line shows perfect circle
-          </p>
         </div>
       )}
 
