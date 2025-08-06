@@ -83,7 +83,7 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
     setPoints(prev => [...prev, point]);
   }, [isDrawing, getEventPosition]);
 
-  const stopDrawing = useCallback(() => {
+  const stopDrawing = useCallback(async () => {
     if (!isDrawing || points.length < 10) {
       setIsDrawing(false);
       return;
@@ -93,7 +93,25 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
     setScore(accuracy);
     setIsDrawing(false);
     setShowResult(true);
-  }, [isDrawing, points, centerPoint, calculateCircleAccuracy]);
+
+    // Submit score if user is available
+    if (user && accuracy > 0) {
+      setIsSubmittingScore(true);
+      try {
+        const isNewBestScore = accuracy > userBestScore;
+        setIsNewBest(isNewBestScore);
+
+        const success = await Database.submitScore(user.id, accuracy);
+        if (success && isNewBestScore) {
+          await refreshUserBestScore();
+        }
+      } catch (error) {
+        console.error('Error submitting score:', error);
+      } finally {
+        setIsSubmittingScore(false);
+      }
+    }
+  }, [isDrawing, points, centerPoint, calculateCircleAccuracy, user, userBestScore, refreshUserBestScore]);
 
   const resetCanvas = useCallback(() => {
     setPoints([]);
