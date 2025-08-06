@@ -29,18 +29,28 @@ export const UserNameInput: React.FC = () => {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-6 w-full">
+    <div className={`rounded-2xl shadow-lg border p-6 w-full transition-colors duration-300 ${
+      isDark
+        ? 'bg-gray-800 border-gray-700'
+        : 'bg-white border-slate-200'
+    }`}>
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
             <span className="text-white text-sm">👤</span>
           </div>
-          <span className="text-slate-700 font-medium">Player Profile</span>
+          <span className={`font-medium ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>
+            Player Profile
+          </span>
         </div>
         {userBestScore > 0 && (
           <div className="text-right">
-            <div className="text-xs text-slate-500">Personal Best</div>
-            <div className="text-lg font-bold text-purple-600">{userBestScore.toFixed(1)}%</div>
+            <div className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+              Personal Best
+            </div>
+            <div className="text-lg font-bold text-purple-400">
+              {userBestScore.toFixed(1)}%
+            </div>
           </div>
         )}
       </div>
