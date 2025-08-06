@@ -126,7 +126,7 @@ export class Database {
     }
   }
 
-  // Submit a new score for a user
+  // Submit a new score for a user (only if it's their best score)
   static async submitScore(userId: string, score: number): Promise<boolean> {
     if (!supabase) {
       console.warn("Supabase not configured - score not saved");
@@ -134,6 +134,15 @@ export class Database {
     }
 
     try {
+      // First check if user has a better score already
+      const currentBest = await this.getUserBestScore(userId);
+
+      // Only save if this is a new personal best
+      if (score <= currentBest) {
+        console.log(`Score ${score} not saved - current best is ${currentBest}`);
+        return true; // Not an error, just not a new best
+      }
+
       const { error } = await supabase
         .from("scores")
         .insert([{ user_id: userId, score }]);
@@ -152,6 +161,7 @@ export class Database {
         return false;
       }
 
+      console.log(`New personal best saved: ${score}`);
       return true;
     } catch (error) {
       console.error("Error in submitScore:", error);
@@ -175,7 +185,7 @@ export class Database {
           user_id,
           score,
           created_at,
-          user:users(id, name, created_at)
+          user:users(id, name, created_at, country_code, country_name, country_flag)
         `,
         )
         .order("score", { ascending: false });
