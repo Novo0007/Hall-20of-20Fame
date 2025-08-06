@@ -12,9 +12,14 @@ type View = 'game' | 'leaderboard';
 const GameContent: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('game');
   const { userBestScore } = useUser();
+  const { isDark } = useTheme();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
+    <div className={`min-h-screen transition-colors duration-300 ${
+      isDark
+        ? 'bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900'
+        : 'bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50'
+    }`}>
       <Header
         currentView={currentView}
         onNavigate={setCurrentView}
