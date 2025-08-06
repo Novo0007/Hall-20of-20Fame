@@ -197,12 +197,17 @@ export const Leaderboard: React.FC = () => {
                               {score.user?.name || "Unknown Player"}
                             </p>
                             {score.user?.country_flag && (
-                              <span
-                                className="text-lg shrink-0 bg-white/80 rounded-full w-8 h-8 flex items-center justify-center shadow-sm"
-                                title={score.user.country_name}
-                              >
-                                {score.user.country_flag}
-                              </span>
+                              <div className="flex items-center space-x-1 shrink-0">
+                                <span
+                                  className="text-lg bg-white/80 rounded-full w-8 h-8 flex items-center justify-center shadow-sm"
+                                  title={score.user.country_name}
+                                >
+                                  {score.user.country_flag}
+                                </span>
+                                <span className="text-xs font-medium text-slate-600">
+                                  {score.user.country_name}
+                                </span>
+                              </div>
                             )}
                             {isCurrentUser && (
                               <span className="inline-flex items-center bg-purple-500 text-white px-2 py-0.5 rounded-full text-xs font-medium shrink-0">
