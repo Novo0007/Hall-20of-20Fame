@@ -63,7 +63,11 @@ export const Leaderboard: React.FC = () => {
         </p>
       </div>
 
-      <div className="bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden">
+      <div className={`rounded-3xl shadow-2xl border overflow-hidden transition-colors duration-300 ${
+        isDark
+          ? 'bg-gray-800 border-gray-700'
+          : 'bg-white border-slate-200'
+      }`}>
         <div className="bg-gradient-to-r from-yellow-500 to-orange-500 p-4 sm:p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2 sm:space-x-3">
