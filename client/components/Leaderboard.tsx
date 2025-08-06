@@ -129,9 +129,9 @@ export const Leaderboard: React.FC = () => {
                       <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-yellow-300 to-orange-400 transform rotate-12 translate-x-4 -translate-y-4 rounded-lg opacity-20"></div>
                     )}
 
-                    <div className="flex items-center justify-between p-6">
-                      <div className="flex items-center space-x-6">
-                        <div className={`flex items-center justify-center w-12 h-12 rounded-xl font-bold text-lg ${
+                    <div className="flex items-center justify-between p-4 sm:p-6">
+                      <div className="flex items-center space-x-3 sm:space-x-4">
+                        <div className={`flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-xl font-bold text-sm sm:text-lg ${
                           position === 1 ? 'bg-gradient-to-br from-yellow-400 to-yellow-600 text-white' :
                           position === 2 ? 'bg-gradient-to-br from-gray-300 to-gray-500 text-white' :
                           position === 3 ? 'bg-gradient-to-br from-orange-400 to-orange-600 text-white' :
@@ -140,9 +140,9 @@ export const Leaderboard: React.FC = () => {
                           {position <= 3 ? getPositionMedal(position) : `#${position}`}
                         </div>
 
-                        <div>
-                          <div className="flex items-center space-x-3">
-                            <p className={`text-lg font-semibold ${
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center space-x-2 mb-1">
+                            <p className={`text-sm sm:text-lg font-semibold truncate ${
                               isPodium ? 'text-orange-900' :
                               isCurrentUser ? 'text-purple-900' :
                               'text-slate-800'
@@ -150,35 +150,33 @@ export const Leaderboard: React.FC = () => {
                               {score.user?.name || 'Unknown Player'}
                             </p>
                             {isCurrentUser && (
-                              <span className="inline-flex items-center space-x-1 bg-purple-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                                <span>👤</span>
-                                <span>You</span>
-                              </span>
-                            )}
-                            {isPodium && (
-                              <span className="inline-flex items-center space-x-1 bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                                <span>🏆</span>
-                                <span>Champion</span>
+                              <span className="inline-flex items-center bg-purple-500 text-white px-2 py-0.5 rounded-full text-xs font-medium shrink-0">
+                                You
                               </span>
                             )}
                           </div>
-                          <p className="text-slate-500 text-sm">
+                          {isPodium && (
+                            <span className="inline-flex items-center space-x-1 bg-yellow-500 text-white px-2 py-0.5 rounded-full text-xs font-medium">
+                              <span>🏆</span>
+                              <span className="hidden sm:inline">Champion</span>
+                            </span>
+                          )}
+                          <p className="text-slate-500 text-xs">
                             {new Date(score.created_at).toLocaleDateString('en-US', {
                               month: 'short',
-                              day: 'numeric',
-                              year: 'numeric'
+                              day: 'numeric'
                             })}
                           </p>
                         </div>
                       </div>
 
-                      <div className="text-right">
-                        <div className={`text-3xl font-bold mb-1 ${getScoreColor(score.score)}`}>
+                      <div className="text-right shrink-0">
+                        <div className={`text-xl sm:text-3xl font-bold mb-1 ${getScoreColor(score.score)}`}>
                           {score.score.toFixed(1)}%
                         </div>
-                        <div className="text-slate-500 text-sm">
+                        <div className="text-slate-500 text-xs sm:text-sm">
                           {score.score >= 90 ? 'Perfect' :
-                           score.score >= 70 ? 'Excellent' :
+                           score.score >= 70 ? 'Great' :
                            score.score >= 50 ? 'Good' : 'Fair'}
                         </div>
                       </div>
