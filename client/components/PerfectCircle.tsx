@@ -181,8 +181,14 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
 
     // Draw perfect circle comparison if we have a score
     if (showResult && points.length > 0) {
-      const radii = points.map(point => 
-        Math.sqrt(Math.pow(point.x - centerPoint.x, 2) + Math.pow(point.y - centerPoint.y, 2))
+      // Calculate the actual center of the drawn points
+      const actualCenter = {
+        x: points.reduce((sum, p) => sum + p.x, 0) / points.length,
+        y: points.reduce((sum, p) => sum + p.y, 0) / points.length,
+      };
+
+      const radii = points.map(point =>
+        Math.sqrt(Math.pow(point.x - actualCenter.x, 2) + Math.pow(point.y - actualCenter.y, 2))
       );
       const avgRadius = radii.reduce((sum, r) => sum + r, 0) / radii.length;
 
@@ -190,7 +196,7 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
       ctx.lineWidth = 2;
       ctx.setLineDash([5, 5]);
       ctx.beginPath();
-      ctx.arc(centerPoint.x, centerPoint.y, avgRadius, 0, 2 * Math.PI);
+      ctx.arc(actualCenter.x, actualCenter.y, avgRadius, 0, 2 * Math.PI);
       ctx.stroke();
       ctx.setLineDash([]);
     }
