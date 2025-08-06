@@ -7,13 +7,21 @@ interface Point {
   y: number;
 }
 
-export const PerfectCircle: React.FC = () => {
+interface PerfectCircleProps {
+  onShowLeaderboard?: () => void;
+}
+
+export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [points, setPoints] = useState<Point[]>([]);
   const [score, setScore] = useState<number | null>(null);
   const [centerPoint, setCenterPoint] = useState<Point>({ x: 0, y: 0 });
   const [showResult, setShowResult] = useState(false);
+  const [isSubmittingScore, setIsSubmittingScore] = useState(false);
+  const [isNewBest, setIsNewBest] = useState(false);
+
+  const { user, userBestScore, refreshUserBestScore } = useUser();
 
   const calculateCircleAccuracy = useCallback((drawnPoints: Point[], center: Point): number => {
     if (drawnPoints.length < 10) return 0;
