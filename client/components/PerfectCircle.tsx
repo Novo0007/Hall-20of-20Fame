@@ -24,7 +24,7 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
   const { user, userBestScore, refreshUserBestScore } = useUser();
 
   const calculateCircleAccuracy = useCallback((drawnPoints: Point[], center: Point): number => {
-    if (drawnPoints.length < 10) return 0;
+    if (drawnPoints.length < 5) return 0;
 
     // Calculate the average radius
     const radii = drawnPoints.map(point => 
