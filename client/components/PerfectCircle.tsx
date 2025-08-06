@@ -325,10 +325,10 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
         </div>
       )}
 
-      <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+      <div className="flex flex-col gap-3 items-center justify-center max-w-md mx-auto w-full">
         <button
           onClick={resetCanvas}
-          className="px-8 py-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-2xl font-semibold hover:from-yellow-500 hover:to-orange-600 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+          className="w-full px-6 py-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-xl font-semibold hover:from-yellow-500 hover:to-orange-600 transition-all duration-200 shadow-lg"
         >
           {showResult ? '🎯 Try Again' : '🧹 Clear Canvas'}
         </button>
@@ -336,32 +336,23 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
         {onShowLeaderboard && (
           <button
             onClick={onShowLeaderboard}
-            className="px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-2xl font-semibold hover:from-purple-600 hover:to-pink-600 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+            className="w-full px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-semibold hover:from-purple-600 hover:to-pink-600 transition-all duration-200 shadow-lg"
           >
             🏆 View Leaderboard
           </button>
         )}
       </div>
 
-      <div className="mt-12 max-w-2xl mx-auto">
-        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6 border border-blue-100">
-          <h3 className="text-lg font-semibold text-slate-800 mb-3 flex items-center">
-            <span className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm mr-2">💡</span>
-            Pro Tips
+      <div className="mt-8 max-w-md mx-auto">
+        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4 border border-blue-100">
+          <h3 className="text-sm font-semibold text-slate-800 mb-3 flex items-center justify-center">
+            <span className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs mr-2">💡</span>
+            Quick Tips
           </h3>
-          <div className="grid md:grid-cols-3 gap-4 text-sm">
-            <div className="text-center">
-              <div className="text-2xl mb-2">💪</div>
-              <p className="text-slate-700"><strong>Use your arm</strong> instead of just your wrist for smoother motion</p>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl mb-2">🎯</div>
-              <p className="text-slate-700"><strong>Steady speed</strong> maintains consistent circle shape</p>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl mb-2">🔄</div>
-              <p className="text-slate-700"><strong>Practice</strong> makes perfect - keep trying!</p>
-            </div>
+          <div className="space-y-2 text-xs text-center">
+            <p className="text-slate-700">💪 <strong>Use your whole arm</strong> for smoother circles</p>
+            <p className="text-slate-700">🎯 <strong>Keep steady speed</strong> while drawing</p>
+            <p className="text-slate-700">🔄 <strong>Practice makes perfect!</strong></p>
           </div>
         </div>
       </div>
