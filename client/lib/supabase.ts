@@ -45,6 +45,15 @@ export interface Score {
 export class Database {
   // Get or create user by name
   static async getOrCreateUser(name: string): Promise<User | null> {
+    if (!supabase) {
+      console.warn('Supabase not configured - using mock user');
+      return {
+        id: 'mock-user-' + name.toLowerCase().replace(/\s+/g, '-'),
+        name,
+        created_at: new Date().toISOString(),
+      };
+    }
+
     try {
       // First, try to find existing user by name
       const { data: existingUser, error: findError } = await supabase
