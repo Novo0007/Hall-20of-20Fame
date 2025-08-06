@@ -23,6 +23,7 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
   const [isNewBest, setIsNewBest] = useState(false);
 
   const { user, userBestScore, refreshUserBestScore } = useUser();
+  const { isDark } = useTheme();
 
   const calculateCircleAccuracy = useCallback((drawnPoints: Point[], center: Point): number => {
     if (drawnPoints.length < 5) {
