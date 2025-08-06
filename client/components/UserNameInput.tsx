@@ -62,21 +62,38 @@ export const UserNameInput: React.FC = () => {
       </div>
 
       {isEditing ? (
-        <div className="space-y-3">
-          <input
-            type="text"
-            value={tempName}
-            onChange={(e) => setTempName(e.target.value)}
-            onKeyDown={handleKeyPress}
-            className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 ${
-              isDark
-                ? 'bg-gray-700 border-gray-600 text-slate-200 placeholder-slate-400'
-                : 'bg-slate-50 border-slate-200 text-slate-800 placeholder-slate-500'
-            }`}
-            placeholder="Enter your display name"
-            maxLength={20}
-            autoFocus
-          />
+        <div className="space-y-4">
+          <div>
+            <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              Display Name
+            </label>
+            <input
+              type="text"
+              value={tempName}
+              onChange={(e) => setTempName(e.target.value)}
+              onKeyDown={handleKeyPress}
+              className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 ${
+                isDark
+                  ? 'bg-gray-700 border-gray-600 text-slate-200 placeholder-slate-400'
+                  : 'bg-slate-50 border-slate-200 text-slate-800 placeholder-slate-500'
+              }`}
+              placeholder="Enter your display name"
+              maxLength={20}
+              autoFocus
+            />
+          </div>
+
+          <div>
+            <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              Country
+            </label>
+            <CountrySelector
+              selectedCountry={userCountry}
+              onCountrySelect={setUserCountry}
+              autoDetect={!userCountry}
+            />
+          </div>
+
           <div className="flex gap-2">
             <button
               onClick={handleSave}
@@ -105,24 +122,47 @@ export const UserNameInput: React.FC = () => {
           </div>
         </div>
       ) : (
-        <div className="flex items-center justify-between">
-          <div>
-            <div className={`text-xl font-semibold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
-              {userName}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className={`text-xl font-semibold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+                {userName}
+              </div>
+              <div className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                Player name
+              </div>
             </div>
-            <div className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-              Tap to change name
+            <button
+              onClick={() => {
+                setIsEditing(true);
+                setTempName(userName);
+              }}
+              className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-medium hover:from-purple-600 hover:to-pink-600 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+            >
+              ✏️ Edit
+            </button>
+          </div>
+
+          {/* Country Display */}
+          <div className="flex items-center justify-between">
+            <div>
+              <div className={`text-lg font-medium ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+                {userCountry ? (
+                  <span className="flex items-center space-x-2">
+                    <span className="text-xl">{userCountry.flag}</span>
+                    <span>{userCountry.name}</span>
+                  </span>
+                ) : (
+                  <span className={`${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                    🌍 No country selected
+                  </span>
+                )}
+              </div>
+              <div className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                {userCountry ? 'Representing' : 'Tap edit to select country'}
+              </div>
             </div>
           </div>
-          <button
-            onClick={() => {
-              setIsEditing(true);
-              setTempName(userName);
-            }}
-            className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-medium hover:from-purple-600 hover:to-pink-600 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-          >
-            ✏️ Edit
-          </button>
         </div>
       )}
     </div>
