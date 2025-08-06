@@ -235,14 +235,14 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
         </p>
       </div>
 
-      {/* Game Canvas */}
-      <div className="relative mb-8">
-        <div className="bg-white rounded-3xl shadow-2xl p-8 border border-slate-200">
+      {/* Game Canvas - Mobile Optimized */}
+      <div className="relative mb-6 w-full">
+        <div className="bg-white rounded-2xl shadow-xl p-4 sm:p-6 border border-slate-200 mx-auto max-w-md">
           <canvas
             ref={canvasRef}
-            width={400}
-            height={400}
-            className="rounded-2xl bg-slate-50 cursor-crosshair touch-none shadow-inner border-2 border-slate-100"
+            width={320}
+            height={320}
+            className="w-full max-w-xs mx-auto rounded-xl bg-slate-50 cursor-crosshair touch-none shadow-inner border-2 border-slate-100"
             onMouseDown={startDrawing}
             onMouseMove={draw}
             onMouseUp={stopDrawing}
@@ -253,13 +253,13 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
           />
 
           {!isDrawing && points.length === 0 && (
-            <div className="absolute inset-8 flex items-center justify-center pointer-events-none">
+            <div className="absolute inset-4 sm:inset-6 flex items-center justify-center pointer-events-none">
               <div className="text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mb-4 mx-auto shadow-lg">
-                  <span className="text-white text-2xl">⭕</span>
+                <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mb-3 mx-auto shadow-lg">
+                  <span className="text-white text-lg">⭕</span>
                 </div>
-                <p className="text-slate-600 font-medium">Click and drag to draw</p>
-                <p className="text-slate-400 text-sm mt-1">Create the most perfect circle you can</p>
+                <p className="text-slate-600 font-medium text-sm">Tap and drag to draw</p>
+                <p className="text-slate-400 text-xs mt-1">Make the most perfect circle</p>
               </div>
             </div>
           )}
