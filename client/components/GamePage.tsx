@@ -91,28 +91,6 @@ const GameContent: React.FC = () => {
         </div>
       )}
 
-      {/* Database Connection Status */}
-      <div className="fixed bottom-6 right-6 z-50">
-        <div
-          className={`px-4 py-2 rounded-xl text-sm font-medium backdrop-blur-sm transition-all duration-200 ${
-            isSupabaseEnabled
-              ? "bg-green-500/90 text-white shadow-lg"
-              : "bg-orange-500/90 text-white shadow-lg"
-          }`}
-        >
-          {isSupabaseEnabled ? (
-            <span className="flex items-center space-x-2">
-              <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
-              <span>Database Connected</span>
-            </span>
-          ) : (
-            <span className="flex items-center space-x-2">
-              <span className="w-2 h-2 bg-white rounded-full"></span>
-              <span>Offline Mode</span>
-            </span>
-          )}
-        </div>
-      </div>
     </div>
   );
 };
