@@ -83,9 +83,16 @@ export class Database {
       }
 
       // If user doesn't exist, create new one
+      const userData: any = { name };
+      if (country) {
+        userData.country_code = country.code;
+        userData.country_name = country.name;
+        userData.country_flag = country.flag;
+      }
+
       const { data: newUser, error: createError } = await supabase
         .from('users')
-        .insert([{ name }])
+        .insert([userData])
         .select()
         .single();
 
