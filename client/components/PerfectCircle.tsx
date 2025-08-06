@@ -1,0 +1,223 @@
+import React, { useRef, useEffect, useState, useCallback } from 'react';
+
+interface Point {
+  x: number;
+  y: number;
+}
+
+export const PerfectCircle: React.FC = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [points, setPoints] = useState<Point[]>([]);
+  const [score, setScore] = useState<number | null>(null);
+  const [centerPoint, setCenterPoint] = useState<Point>({ x: 0, y: 0 });
+  const [showResult, setShowResult] = useState(false);
+
+  const calculateCircleAccuracy = useCallback((drawnPoints: Point[], center: Point): number => {
+    if (drawnPoints.length < 10) return 0;
+
+    // Calculate the average radius
+    const radii = drawnPoints.map(point => 
+      Math.sqrt(Math.pow(point.x - center.x, 2) + Math.pow(point.y - center.y, 2))
+    );
+    const avgRadius = radii.reduce((sum, r) => sum + r, 0) / radii.length;
+
+    // Calculate how much each point deviates from the average radius
+    const deviations = radii.map(radius => Math.abs(radius - avgRadius));
+    const avgDeviation = deviations.reduce((sum, d) => sum + d, 0) / deviations.length;
+
+    // Convert to a percentage score (lower deviation = higher score)
+    const maxAllowedDeviation = avgRadius * 0.1; // 10% of radius
+    const accuracy = Math.max(0, 100 - (avgDeviation / maxAllowedDeviation) * 100);
+    
+    return Math.min(100, Math.max(0, accuracy));
+  }, []);
+
+  const getEventPosition = useCallback((e: React.MouseEvent | React.TouchEvent): Point => {
+    const canvas = canvasRef.current;
+    if (!canvas) return { x: 0, y: 0 };
+
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+
+    if ('touches' in e) {
+      const touch = e.touches[0] || e.changedTouches[0];
+      return {
+        x: (touch.clientX - rect.left) * scaleX,
+        y: (touch.clientY - rect.top) * scaleY,
+      };
+    } else {
+      return {
+        x: (e.clientX - rect.left) * scaleX,
+        y: (e.clientY - rect.top) * scaleY,
+      };
+    }
+  }, []);
+
+  const startDrawing = useCallback((e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
+    const point = getEventPosition(e);
+    setCenterPoint(point);
+    setIsDrawing(true);
+    setPoints([point]);
+    setScore(null);
+    setShowResult(false);
+  }, [getEventPosition]);
+
+  const draw = useCallback((e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
+    if (!isDrawing) return;
+
+    const point = getEventPosition(e);
+    setPoints(prev => [...prev, point]);
+  }, [isDrawing, getEventPosition]);
+
+  const stopDrawing = useCallback(() => {
+    if (!isDrawing || points.length < 10) {
+      setIsDrawing(false);
+      return;
+    }
+
+    const accuracy = calculateCircleAccuracy(points, centerPoint);
+    setScore(accuracy);
+    setIsDrawing(false);
+    setShowResult(true);
+  }, [isDrawing, points, centerPoint, calculateCircleAccuracy]);
+
+  const resetCanvas = useCallback(() => {
+    setPoints([]);
+    setScore(null);
+    setIsDrawing(false);
+    setShowResult(false);
+    
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext('2d');
+    if (ctx && canvas) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  }, []);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext('2d');
+    if (!ctx || !canvas) return;
+
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw the path
+    if (points.length > 1) {
+      ctx.strokeStyle = '#FACC15';
+      ctx.lineWidth = 3;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, points[0].y);
+      for (let i = 1; i < points.length; i++) {
+        ctx.lineTo(points[i].x, points[i].y);
+      }
+      ctx.stroke();
+    }
+
+    // Draw perfect circle comparison if we have a score
+    if (showResult && points.length > 0) {
+      const radii = points.map(point => 
+        Math.sqrt(Math.pow(point.x - centerPoint.x, 2) + Math.pow(point.y - centerPoint.y, 2))
+      );
+      const avgRadius = radii.reduce((sum, r) => sum + r, 0) / radii.length;
+
+      ctx.strokeStyle = '#10B981';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([5, 5]);
+      ctx.beginPath();
+      ctx.arc(centerPoint.x, centerPoint.y, avgRadius, 0, 2 * Math.PI);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+  }, [points, showResult, centerPoint]);
+
+  const getScoreColor = (score: number): string => {
+    if (score >= 90) return 'text-green-400';
+    if (score >= 70) return 'text-yellow-400';
+    if (score >= 50) return 'text-orange-400';
+    return 'text-red-400';
+  };
+
+  const getScoreMessage = (score: number): string => {
+    if (score >= 95) return 'Perfect! 🎯';
+    if (score >= 90) return 'Excellent! 🌟';
+    if (score >= 80) return 'Great! 👍';
+    if (score >= 70) return 'Good! 👌';
+    if (score >= 60) return 'Not bad! 🙂';
+    if (score >= 50) return 'Keep trying! 💪';
+    return 'Practice more! 📈';
+  };
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4">
+      <div className="text-center mb-8">
+        <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-2">
+          Perfect Circle
+        </h1>
+        <p className="text-muted-foreground text-lg md:text-xl">
+          Draw the most perfect circle you can
+        </p>
+      </div>
+
+      <div className="relative mb-6">
+        <canvas
+          ref={canvasRef}
+          width={400}
+          height={400}
+          className="border-2 border-border rounded-lg bg-card cursor-crosshair touch-none"
+          onMouseDown={startDrawing}
+          onMouseMove={draw}
+          onMouseUp={stopDrawing}
+          onMouseLeave={stopDrawing}
+          onTouchStart={startDrawing}
+          onTouchMove={draw}
+          onTouchEnd={stopDrawing}
+        />
+        
+        {!isDrawing && points.length === 0 && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div className="text-center text-muted-foreground">
+              <div className="text-6xl mb-2">⭕</div>
+              <p className="text-sm">Click and drag to draw</p>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {showResult && score !== null && (
+        <div className="text-center mb-6">
+          <div className={`text-6xl font-bold ${getScoreColor(score)} mb-2`}>
+            {score.toFixed(1)}%
+          </div>
+          <p className="text-xl text-foreground mb-1">
+            {getScoreMessage(score)}
+          </p>
+          <p className="text-sm text-muted-foreground">
+            Green dashed line shows perfect circle
+          </p>
+        </div>
+      )}
+
+      <button
+        onClick={resetCanvas}
+        className="px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
+      >
+        {showResult ? 'Try Again' : 'Clear'}
+      </button>
+
+      <div className="mt-8 text-center text-sm text-muted-foreground max-w-md">
+        <p>
+          <strong>Tips:</strong> Use steady movements, draw with your whole arm, 
+          and try to maintain consistent speed around the circle.
+        </p>
+      </div>
+    </div>
+  );
+};
