@@ -76,6 +76,11 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     await handleUserNameChange(name);
   };
 
+  const setUserCountry = async (country: Country) => {
+    setUserCountryState(country);
+    localStorage.setItem('perfect-circle-country', JSON.stringify(country));
+  };
+
   const refreshUserBestScore = async () => {
     if (user) {
       const bestScore = await Database.getUserBestScore(user.id);
