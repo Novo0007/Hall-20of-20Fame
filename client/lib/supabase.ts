@@ -31,6 +31,9 @@ export interface User {
   id: string;
   name: string;
   created_at: string;
+  country_code?: string;
+  country_name?: string;
+  country_flag?: string;
 }
 
 export interface Score {
