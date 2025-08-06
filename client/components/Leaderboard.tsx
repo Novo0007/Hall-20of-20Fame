@@ -84,60 +84,108 @@ export const Leaderboard: React.FC = () => {
           </div>
         </div>
 
-        {isLoading ? (
-          <div className="text-center py-8">
-            <div className="animate-spin text-2xl mb-2">⭕</div>
-            <p className="text-muted-foreground">Loading leaderboard...</p>
-          </div>
-        ) : scores.length === 0 ? (
-          <div className="text-center py-8">
-            <p className="text-muted-foreground mb-2">No scores yet!</p>
-            <p className="text-sm text-muted-foreground">Be the first to set a record</p>
-          </div>
-        ) : (
-          <div className="space-y-2">
-            {scores.map((score, index) => {
-              const position = index + 1;
-              const isCurrentUser = user && score.user_id === user.id;
-              
-              return (
-                <div
-                  key={score.id}
-                  className={`flex items-center justify-between p-3 rounded-lg transition-colors ${
-                    isCurrentUser 
-                      ? 'bg-primary/10 border border-primary/20' 
-                      : 'bg-secondary/50 hover:bg-secondary/70'
-                  }`}
-                >
-                  <div className="flex items-center gap-4">
-                    <span className="text-lg font-medium w-8 text-center">
-                      {getPositionMedal(position)}
-                    </span>
-                    <div>
-                      <p className={`font-medium ${isCurrentUser ? 'text-primary' : 'text-foreground'}`}>
-                        {score.user?.name || 'Unknown'}
-                        {isCurrentUser && (
-                          <span className="ml-2 text-xs bg-primary text-primary-foreground px-2 py-1 rounded-full">
-                            You
-                          </span>
-                        )}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {new Date(score.created_at).toLocaleDateString()}
-                      </p>
+        <div className="p-6">
+          {isLoading ? (
+            <div className="text-center py-16">
+              <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mb-4 mx-auto animate-pulse">
+                <span className="text-white text-2xl">⭕</span>
+              </div>
+              <p className="text-slate-600 font-medium">Loading global rankings...</p>
+            </div>
+          ) : scores.length === 0 ? (
+            <div className="text-center py-16">
+              <div className="w-20 h-20 bg-gradient-to-br from-slate-200 to-slate-300 rounded-full flex items-center justify-center mb-6 mx-auto">
+                <span className="text-slate-500 text-3xl">🎯</span>
+              </div>
+              <h3 className="text-xl font-semibold text-slate-800 mb-2">No champions yet!</h3>
+              <p className="text-slate-600 mb-4">Be the first to claim the throne</p>
+              <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-purple-100 to-pink-100 px-4 py-2 rounded-full">
+                <span className="text-purple-600">👑</span>
+                <span className="text-purple-800 font-medium">First place awaits you</span>
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {scores.slice(0, 10).map((score, index) => {
+                const position = index + 1;
+                const isCurrentUser = user && score.user_id === user.id;
+                const isPodium = position <= 3;
+
+                return (
+                  <div
+                    key={score.id}
+                    className={`relative overflow-hidden rounded-2xl transition-all duration-200 hover:scale-[1.02] ${
+                      isPodium
+                        ? 'bg-gradient-to-r from-yellow-50 to-orange-50 border-2 border-yellow-200 shadow-lg'
+                        : isCurrentUser
+                        ? 'bg-gradient-to-r from-purple-50 to-pink-50 border-2 border-purple-200 shadow-md'
+                        : 'bg-slate-50 border border-slate-200 hover:bg-slate-100'
+                    }`}
+                  >
+                    {isPodium && (
+                      <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-yellow-300 to-orange-400 transform rotate-12 translate-x-4 -translate-y-4 rounded-lg opacity-20"></div>
+                    )}
+
+                    <div className="flex items-center justify-between p-6">
+                      <div className="flex items-center space-x-6">
+                        <div className={`flex items-center justify-center w-12 h-12 rounded-xl font-bold text-lg ${
+                          position === 1 ? 'bg-gradient-to-br from-yellow-400 to-yellow-600 text-white' :
+                          position === 2 ? 'bg-gradient-to-br from-gray-300 to-gray-500 text-white' :
+                          position === 3 ? 'bg-gradient-to-br from-orange-400 to-orange-600 text-white' :
+                          'bg-slate-200 text-slate-700'
+                        }`}>
+                          {position <= 3 ? getPositionMedal(position) : `#${position}`}
+                        </div>
+
+                        <div>
+                          <div className="flex items-center space-x-3">
+                            <p className={`text-lg font-semibold ${
+                              isPodium ? 'text-orange-900' :
+                              isCurrentUser ? 'text-purple-900' :
+                              'text-slate-800'
+                            }`}>
+                              {score.user?.name || 'Unknown Player'}
+                            </p>
+                            {isCurrentUser && (
+                              <span className="inline-flex items-center space-x-1 bg-purple-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                                <span>👤</span>
+                                <span>You</span>
+                              </span>
+                            )}
+                            {isPodium && (
+                              <span className="inline-flex items-center space-x-1 bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                                <span>🏆</span>
+                                <span>Champion</span>
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-slate-500 text-sm">
+                            {new Date(score.created_at).toLocaleDateString('en-US', {
+                              month: 'short',
+                              day: 'numeric',
+                              year: 'numeric'
+                            })}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="text-right">
+                        <div className={`text-3xl font-bold mb-1 ${getScoreColor(score.score)}`}>
+                          {score.score.toFixed(1)}%
+                        </div>
+                        <div className="text-slate-500 text-sm">
+                          {score.score >= 90 ? 'Perfect' :
+                           score.score >= 70 ? 'Excellent' :
+                           score.score >= 50 ? 'Good' : 'Fair'}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  
-                  <div className="text-right">
-                    <div className={`text-lg font-bold ${getScoreColor(score.score)}`}>
-                      {score.score.toFixed(1)}%
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
+                );
+              })}
+            </div>
+          )}
+        </div>
 
         <div className="mt-6 text-center text-sm text-muted-foreground">
           <p>Only your highest score is shown • Updated in real-time</p>
