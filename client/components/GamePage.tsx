@@ -90,7 +90,6 @@ const GameContent: React.FC = () => {
           </div>
         </div>
       )}
-
     </div>
   );
 };
