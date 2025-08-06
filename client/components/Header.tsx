@@ -15,13 +15,13 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate, userBes
       <div className="relative px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Logo/Brand */}
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-xl flex items-center justify-center shadow-lg">
-              <span className="text-white text-xl sm:text-2xl font-bold">⭕</span>
+          <div className="flex items-center space-x-2 sm:space-x-3">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-lg flex items-center justify-center shadow-lg">
+              <span className="text-white text-lg sm:text-xl font-bold">⭕</span>
             </div>
             <div>
-              <h1 className="text-xl sm:text-2xl font-bold text-white">Perfect Circle</h1>
-              <p className="text-purple-200 text-xs sm:text-sm">Master the Art of Precision</p>
+              <h1 className="text-lg sm:text-xl font-bold text-white">Perfect Circle</h1>
+              <p className="text-purple-200 text-xs hidden sm:block">Master the Art of Precision</p>
             </div>
           </div>
 
