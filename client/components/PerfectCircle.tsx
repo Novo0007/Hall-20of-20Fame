@@ -118,7 +118,9 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
     setScore(null);
     setIsDrawing(false);
     setShowResult(false);
-    
+    setIsSubmittingScore(false);
+    setIsNewBest(false);
+
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext('2d');
     if (ctx && canvas) {
