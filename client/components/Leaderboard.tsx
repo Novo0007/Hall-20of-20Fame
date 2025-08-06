@@ -187,8 +187,20 @@ export const Leaderboard: React.FC = () => {
           )}
         </div>
 
-        <div className="mt-6 text-center text-sm text-muted-foreground">
-          <p>Only your highest score is shown • Updated in real-time</p>
+        <div className="bg-slate-50 px-6 py-4 border-t border-slate-200">
+          <div className="flex flex-col sm:flex-row items-center justify-between text-sm text-slate-600">
+            <div className="flex items-center space-x-4 mb-2 sm:mb-0">
+              <span className="flex items-center space-x-1">
+                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                <span>Live rankings</span>
+              </span>
+              <span className="hidden sm:inline">•</span>
+              <span>Best score per player</span>
+            </div>
+            <div className="text-slate-500">
+              Updated in real-time
+            </div>
+          </div>
         </div>
       </div>
     </div>
