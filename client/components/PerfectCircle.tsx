@@ -253,7 +253,19 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
 
           <p className="text-xl text-foreground mb-1">
             {getScoreMessage(score)}
+            {isNewBest && (
+              <span className="ml-2 text-sm bg-primary text-primary-foreground px-2 py-1 rounded-full">
+                New Best! 🎉
+              </span>
+            )}
           </p>
+
+          {isSubmittingScore && (
+            <p className="text-sm text-muted-foreground mb-1">
+              Saving score...
+            </p>
+          )}
+
           <p className="text-sm text-muted-foreground">
             Green dashed line shows perfect circle
           </p>
