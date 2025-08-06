@@ -154,6 +154,12 @@ export class Database {
         `)
         .order('score', { ascending: false });
 
+      // Handle schema cache issues
+      if (error?.code === 'PGRST205') {
+        console.warn('Schema cache not ready, showing empty leaderboard');
+        return [];
+      }
+
       if (error) {
         console.error('Error fetching leaderboard:', JSON.stringify(error, null, 2));
         return [];
