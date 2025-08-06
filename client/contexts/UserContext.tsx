@@ -57,7 +57,13 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const handleUserNameChange = async (name: string) => {
     setIsLoading(true);
     try {
-      const userData = await Database.getOrCreateUser(name);
+      const countryData = userCountry ? {
+        code: userCountry.code,
+        name: userCountry.name,
+        flag: userCountry.flag
+      } : undefined;
+
+      const userData = await Database.getOrCreateUser(name, countryData);
       if (userData) {
         setUser(userData);
         const bestScore = await Database.getUserBestScore(userData.id);
