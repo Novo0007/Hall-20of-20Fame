@@ -198,7 +198,7 @@ export const Leaderboard: React.FC = () => {
                             </p>
                             {score.user?.country_flag && (
                               <span
-                                className="text-lg shrink-0"
+                                className="text-lg shrink-0 bg-white/80 rounded-full w-8 h-8 flex items-center justify-center shadow-sm"
                                 title={score.user.country_name}
                               >
                                 {score.user.country_flag}
