@@ -225,14 +225,24 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
     <div className="flex flex-col items-center">
       {/* Compact Mobile Header */}
       <div className="text-center mb-6 w-full">
-        <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-purple-100 to-pink-100 px-3 py-1.5 rounded-full mb-3">
+        <div className={`inline-flex items-center space-x-2 px-3 py-1.5 rounded-full mb-3 ${
+          isDark
+            ? 'bg-gradient-to-r from-purple-800/30 to-pink-800/30'
+            : 'bg-gradient-to-r from-purple-100 to-pink-100'
+        }`}>
           <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
-          <span className="text-slate-700 text-xs font-medium">Challenge Your Precision</span>
+          <span className={`text-xs font-medium ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+            Challenge Your Precision
+          </span>
         </div>
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 bg-clip-text text-transparent mb-2">
+        <h1 className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-2 ${
+          isDark
+            ? 'bg-gradient-to-r from-slate-100 via-purple-200 to-slate-100 bg-clip-text text-transparent'
+            : 'bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 bg-clip-text text-transparent'
+        }`}>
           Perfect Circle
         </h1>
-        <p className="text-slate-600 text-sm sm:text-base px-4">
+        <p className={`text-sm sm:text-base px-4 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
           Draw the most perfect circle you can
         </p>
       </div>
