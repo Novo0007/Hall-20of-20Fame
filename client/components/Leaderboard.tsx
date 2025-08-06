@@ -157,10 +157,15 @@ export const Leaderboard: React.FC = () => {
                             <p className={`text-sm sm:text-lg font-semibold truncate ${
                               isPodium ? 'text-orange-900' :
                               isCurrentUser ? 'text-purple-900' :
-                              'text-slate-800'
+                              isDark ? 'text-slate-200' : 'text-slate-800'
                             }`}>
                               {score.user?.name || 'Unknown Player'}
                             </p>
+                            {score.user?.country_flag && (
+                              <span className="text-sm shrink-0" title={score.user.country_name}>
+                                {score.user.country_flag}
+                              </span>
+                            )}
                             {isCurrentUser && (
                               <span className="inline-flex items-center bg-purple-500 text-white px-2 py-0.5 rounded-full text-xs font-medium shrink-0">
                                 You
