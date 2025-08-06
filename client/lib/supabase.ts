@@ -1,10 +1,30 @@
 import { createClient } from '@supabase/supabase-js';
 
-// These should be replaced with your actual Supabase project URL and anon key
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'your-project-url';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'your-anon-key';
+// Get environment variables
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Validate that we have proper Supabase credentials
+const isValidUrl = (url: string) => {
+  try {
+    new URL(url);
+    return url.includes('supabase.co');
+  } catch {
+    return false;
+  }
+};
+
+const isSupabaseConfigured = supabaseUrl && supabaseAnonKey &&
+  isValidUrl(supabaseUrl) &&
+  supabaseAnonKey.length > 20; // Basic validation for anon key
+
+// Only create client if properly configured
+export const supabase = isSupabaseConfigured
+  ? createClient(supabaseUrl!, supabaseAnonKey!)
+  : null;
+
+// Export configuration status
+export const isSupabaseEnabled = !!supabase;
 
 // Types for our database tables
 export interface User {
