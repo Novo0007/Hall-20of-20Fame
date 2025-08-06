@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Database, User } from '../lib/supabase';
+import { Country } from '../lib/countries';
 
 interface UserContextType {
   user: User | null;
