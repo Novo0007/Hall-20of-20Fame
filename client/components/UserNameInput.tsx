@@ -4,7 +4,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import { CountrySelector } from './CountrySelector';
 
 export const UserNameInput: React.FC = () => {
-  const { userName, setUserName, isLoading, userBestScore } = useUser();
+  const { userName, userCountry, setUserName, setUserCountry, isLoading, userBestScore } = useUser();
   const { isDark } = useTheme();
   const [isEditing, setIsEditing] = useState(false);
   const [tempName, setTempName] = useState(userName);
