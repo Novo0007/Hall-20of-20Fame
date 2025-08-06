@@ -220,21 +220,18 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4">
-      {/* Hero Section */}
-      <div className="text-center mb-12 max-w-4xl mx-auto">
-        <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-purple-100 to-pink-100 px-4 py-2 rounded-full mb-6">
-          <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-          <span className="text-slate-700 text-sm font-medium">Challenge Your Precision</span>
+    <div className="flex flex-col items-center">
+      {/* Compact Mobile Header */}
+      <div className="text-center mb-6 w-full">
+        <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-purple-100 to-pink-100 px-3 py-1.5 rounded-full mb-3">
+          <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
+          <span className="text-slate-700 text-xs font-medium">Challenge Your Precision</span>
         </div>
-        <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 bg-clip-text text-transparent mb-4">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 bg-clip-text text-transparent mb-2">
           Perfect Circle
         </h1>
-        <p className="text-slate-600 text-xl md:text-2xl mb-2">
-          Test your drawing skills with the ultimate precision challenge
-        </p>
-        <p className="text-slate-500 text-base md:text-lg">
-          Draw the most perfect circle you can and compete with players worldwide
+        <p className="text-slate-600 text-sm sm:text-base px-4">
+          Draw the most perfect circle you can
         </p>
       </div>
 
