@@ -111,6 +111,11 @@ export class Database {
 
   // Get highest score for each user (leaderboard)
   static async getLeaderboard(limit: number = 10): Promise<Score[]> {
+    if (!supabase) {
+      console.warn('Supabase not configured - returning empty leaderboard');
+      return [];
+    }
+
     try {
       const { data, error } = await supabase
         .from('scores')
@@ -130,7 +135,7 @@ export class Database {
 
       // Group by user and keep only highest score per user
       const userBestScores = new Map<string, Score>();
-      
+
       data?.forEach((score) => {
         const existingScore = userBestScores.get(score.user_id);
         if (!existingScore || score.score > existingScore.score) {
