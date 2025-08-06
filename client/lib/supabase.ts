@@ -87,6 +87,11 @@ export class Database {
 
   // Submit a new score for a user
   static async submitScore(userId: string, score: number): Promise<boolean> {
+    if (!supabase) {
+      console.warn('Supabase not configured - score not saved');
+      return true; // Return true to not break the flow
+    }
+
     try {
       const { error } = await supabase
         .from('scores')
