@@ -328,18 +328,18 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
         </div>
       )}
 
-      <div className="flex flex-col gap-3 items-center">
+      <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
         <button
           onClick={resetCanvas}
-          className="px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
+          className="px-8 py-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-2xl font-semibold hover:from-yellow-500 hover:to-orange-600 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
         >
-          {showResult ? 'Try Again' : 'Clear'}
+          {showResult ? '🎯 Try Again' : '🧹 Clear Canvas'}
         </button>
 
         {onShowLeaderboard && (
           <button
             onClick={onShowLeaderboard}
-            className="px-4 py-2 bg-secondary text-secondary-foreground rounded-lg font-medium hover:bg-secondary/90 transition-colors"
+            className="px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-2xl font-semibold hover:from-purple-600 hover:to-pink-600 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
           >
             🏆 View Leaderboard
           </button>
