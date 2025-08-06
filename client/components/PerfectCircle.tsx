@@ -24,7 +24,10 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
   const { user, userBestScore, refreshUserBestScore } = useUser();
 
   const calculateCircleAccuracy = useCallback((drawnPoints: Point[], center: Point): number => {
-    if (drawnPoints.length < 5) return 0;
+    if (drawnPoints.length < 5) {
+      console.log('Not enough points:', drawnPoints.length);
+      return 0;
+    }
 
     // Calculate the average radius
     const radii = drawnPoints.map(point =>
@@ -39,6 +42,13 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
     // More forgiving scoring system
     const relativeDeviation = avgDeviation / avgRadius; // 0 = perfect, 1 = very bad
 
+    console.log('Debug info:', {
+      pointCount: drawnPoints.length,
+      avgRadius: avgRadius.toFixed(2),
+      avgDeviation: avgDeviation.toFixed(2),
+      relativeDeviation: relativeDeviation.toFixed(3),
+    });
+
     // Convert to percentage (more generous curve)
     let accuracy;
     if (relativeDeviation <= 0.05) { // Very good (within 5%)
@@ -51,6 +61,7 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
       accuracy = Math.max(0, 20 - ((relativeDeviation - 0.30) / 0.20) * 20); // 0-20%
     }
 
+    console.log('Final accuracy:', accuracy.toFixed(1));
     return Math.min(100, Math.max(0, accuracy));
   }, []);
 
