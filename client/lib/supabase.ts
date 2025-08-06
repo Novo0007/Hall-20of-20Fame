@@ -98,7 +98,7 @@ export class Database {
         .insert([{ user_id: userId, score }]);
 
       if (error) {
-        console.error('Error submitting score:', error);
+        console.error('Error submitting score:', JSON.stringify(error, null, 2));
         return false;
       }
 
