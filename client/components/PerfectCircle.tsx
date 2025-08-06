@@ -193,9 +193,34 @@ export const PerfectCircle: React.FC = () => {
 
       {showResult && score !== null && (
         <div className="text-center mb-6">
-          <div className={`text-6xl font-bold ${getScoreColor(score)} mb-2`}>
+          <div className={`text-6xl font-bold ${getScoreColor(score)} mb-4`}>
             {score.toFixed(1)}%
           </div>
+
+          {/* Rating Bar 0-100% */}
+          <div className="w-80 max-w-full mx-auto mb-4">
+            <div className="flex justify-between text-xs text-muted-foreground mb-1">
+              <span>0%</span>
+              <span>Rate</span>
+              <span>100%</span>
+            </div>
+            <div className="w-full bg-muted rounded-full h-3 overflow-hidden">
+              <div
+                className={`h-full transition-all duration-1000 ease-out ${
+                  score >= 90 ? 'bg-green-400' :
+                  score >= 70 ? 'bg-yellow-400' :
+                  score >= 50 ? 'bg-orange-400' : 'bg-red-400'
+                }`}
+                style={{ width: `${score}%` }}
+              />
+            </div>
+            <div className="flex justify-between text-xs text-muted-foreground mt-1">
+              <span>Poor</span>
+              <span>Good</span>
+              <span>Perfect</span>
+            </div>
+          </div>
+
           <p className="text-xl text-foreground mb-1">
             {getScoreMessage(score)}
           </p>
