@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Database, Score } from '../lib/supabase';
 import { useUser } from '../contexts/UserContext';
+import { useTheme } from '../contexts/ThemeContext';
 
 export const Leaderboard: React.FC = () => {
   const [scores, setScores] = useState<Score[]>([]);
