@@ -47,13 +47,16 @@ export interface Score {
 // Database operations
 export class Database {
   // Get or create user by name
-  static async getOrCreateUser(name: string): Promise<User | null> {
+  static async getOrCreateUser(name: string, country?: { code: string; name: string; flag: string }): Promise<User | null> {
     if (!supabase) {
       console.warn('Supabase not configured - using mock user');
       return {
         id: 'mock-user-' + name.toLowerCase().replace(/\s+/g, '-'),
         name,
         created_at: new Date().toISOString(),
+        country_code: country?.code,
+        country_name: country?.name,
+        country_flag: country?.flag,
       };
     }
 
