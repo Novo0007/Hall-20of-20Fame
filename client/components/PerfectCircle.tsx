@@ -29,9 +29,15 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
       return 0;
     }
 
-    // Calculate the average radius
+    // Calculate the actual center of the drawn points (centroid)
+    const actualCenter = {
+      x: drawnPoints.reduce((sum, p) => sum + p.x, 0) / drawnPoints.length,
+      y: drawnPoints.reduce((sum, p) => sum + p.y, 0) / drawnPoints.length,
+    };
+
+    // Calculate the average radius from the actual center
     const radii = drawnPoints.map(point =>
-      Math.sqrt(Math.pow(point.x - center.x, 2) + Math.pow(point.y - center.y, 2))
+      Math.sqrt(Math.pow(point.x - actualCenter.x, 2) + Math.pow(point.y - actualCenter.y, 2))
     );
     const avgRadius = radii.reduce((sum, r) => sum + r, 0) / radii.length;
 
