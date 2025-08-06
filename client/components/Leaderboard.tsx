@@ -45,14 +45,20 @@ export const Leaderboard: React.FC = () => {
     <div className="w-full max-w-4xl mx-auto px-4">
       {/* Header */}
       <div className="text-center mb-8 px-4">
-        <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-yellow-100 to-orange-100 px-3 py-1.5 rounded-full mb-4">
+        <div className={`inline-flex items-center space-x-2 px-3 py-1.5 rounded-full mb-4 ${
+          isDark
+            ? 'bg-gradient-to-r from-yellow-800/30 to-orange-800/30'
+            : 'bg-gradient-to-r from-yellow-100 to-orange-100'
+        }`}>
           <span className="w-1.5 h-1.5 bg-yellow-500 rounded-full animate-pulse"></span>
-          <span className="text-slate-700 text-xs font-medium">Global Competition</span>
+          <span className={`text-xs font-medium ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+            Global Competition
+          </span>
         </div>
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-yellow-600 via-orange-600 to-red-600 bg-clip-text text-transparent mb-2">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text text-transparent mb-2">
           🏆 Leaderboard
         </h1>
-        <p className="text-slate-600 text-sm sm:text-base">
+        <p className={`text-sm sm:text-base ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
           Top 10 Perfect Circle Masters
         </p>
       </div>
