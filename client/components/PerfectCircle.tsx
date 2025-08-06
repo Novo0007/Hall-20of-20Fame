@@ -346,11 +346,27 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
         )}
       </div>
 
-      <div className="mt-8 text-center text-sm text-muted-foreground max-w-md">
-        <p>
-          <strong>Tips:</strong> Use steady movements, draw with your whole arm, 
-          and try to maintain consistent speed around the circle.
-        </p>
+      <div className="mt-12 max-w-2xl mx-auto">
+        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6 border border-blue-100">
+          <h3 className="text-lg font-semibold text-slate-800 mb-3 flex items-center">
+            <span className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm mr-2">💡</span>
+            Pro Tips
+          </h3>
+          <div className="grid md:grid-cols-3 gap-4 text-sm">
+            <div className="text-center">
+              <div className="text-2xl mb-2">💪</div>
+              <p className="text-slate-700"><strong>Use your arm</strong> instead of just your wrist for smoother motion</p>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl mb-2">🎯</div>
+              <p className="text-slate-700"><strong>Steady speed</strong> maintains consistent circle shape</p>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl mb-2">🔄</div>
+              <p className="text-slate-700"><strong>Practice</strong> makes perfect - keep trying!</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
