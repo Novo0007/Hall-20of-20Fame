@@ -3,6 +3,7 @@ import { PerfectCircle } from './PerfectCircle';
 import { Leaderboard } from './Leaderboard';
 import { UserNameInput } from './UserNameInput';
 import { UserProvider } from '../contexts/UserContext';
+import { isSupabaseEnabled } from '../lib/supabase';
 
 type View = 'game' | 'leaderboard';
 
