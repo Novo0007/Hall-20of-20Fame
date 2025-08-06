@@ -139,7 +139,9 @@ export class Database {
 
       // Only save if this is a new personal best
       if (score <= currentBest) {
-        console.log(`Score ${score} not saved - current best is ${currentBest}`);
+        console.log(
+          `Score ${score} not saved - current best is ${currentBest}`,
+        );
         return true; // Not an error, just not a new best
       }
 
