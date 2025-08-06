@@ -1,7 +1,7 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { useUser } from '../contexts/UserContext';
-import { useTheme } from '../contexts/ThemeContext';
-import { Database } from '../lib/supabase';
+import React, { useRef, useEffect, useState, useCallback } from "react";
+import { useUser } from "../contexts/UserContext";
+import { useTheme } from "../contexts/ThemeContext";
+import { Database } from "../lib/supabase";
 
 interface Point {
   x: number;
@@ -12,7 +12,9 @@ interface PerfectCircleProps {
   onShowLeaderboard?: () => void;
 }
 
-export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard }) => {
+export const PerfectCircle: React.FC<PerfectCircleProps> = ({
+  onShowLeaderboard,
+}) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [points, setPoints] = useState<Point[]>([]);
@@ -25,93 +27,113 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
   const { user, userBestScore, refreshUserBestScore } = useUser();
   const { isDark } = useTheme();
 
-  const calculateCircleAccuracy = useCallback((drawnPoints: Point[], center: Point): number => {
-    if (drawnPoints.length < 5) {
-      console.log('Not enough points:', drawnPoints.length);
-      return 0;
-    }
+  const calculateCircleAccuracy = useCallback(
+    (drawnPoints: Point[], center: Point): number => {
+      if (drawnPoints.length < 5) {
+        console.log("Not enough points:", drawnPoints.length);
+        return 0;
+      }
 
-    // Calculate the actual center of the drawn points (centroid)
-    const actualCenter = {
-      x: drawnPoints.reduce((sum, p) => sum + p.x, 0) / drawnPoints.length,
-      y: drawnPoints.reduce((sum, p) => sum + p.y, 0) / drawnPoints.length,
-    };
-
-    // Calculate the average radius from the actual center
-    const radii = drawnPoints.map(point =>
-      Math.sqrt(Math.pow(point.x - actualCenter.x, 2) + Math.pow(point.y - actualCenter.y, 2))
-    );
-    const avgRadius = radii.reduce((sum, r) => sum + r, 0) / radii.length;
-
-    // Calculate how much each point deviates from the average radius
-    const deviations = radii.map(radius => Math.abs(radius - avgRadius));
-    const avgDeviation = deviations.reduce((sum, d) => sum + d, 0) / deviations.length;
-
-    // More forgiving scoring system
-    const relativeDeviation = avgDeviation / avgRadius; // 0 = perfect, 1 = very bad
-
-    console.log('Debug info:', {
-      pointCount: drawnPoints.length,
-      avgRadius: avgRadius.toFixed(2),
-      avgDeviation: avgDeviation.toFixed(2),
-      relativeDeviation: relativeDeviation.toFixed(3),
-    });
-
-    // Convert to percentage (more generous curve)
-    let accuracy;
-    if (relativeDeviation <= 0.05) { // Very good (within 5%)
-      accuracy = 100 - (relativeDeviation / 0.05) * 10; // 90-100%
-    } else if (relativeDeviation <= 0.15) { // Good (5-15%)
-      accuracy = 90 - ((relativeDeviation - 0.05) / 0.10) * 30; // 60-90%
-    } else if (relativeDeviation <= 0.30) { // Okay (15-30%)
-      accuracy = 60 - ((relativeDeviation - 0.15) / 0.15) * 40; // 20-60%
-    } else { // Poor (30%+)
-      accuracy = Math.max(0, 20 - ((relativeDeviation - 0.30) / 0.20) * 20); // 0-20%
-    }
-
-    console.log('Final accuracy:', accuracy.toFixed(1));
-    return Math.min(100, Math.max(0, accuracy));
-  }, []);
-
-  const getEventPosition = useCallback((e: React.MouseEvent | React.TouchEvent): Point => {
-    const canvas = canvasRef.current;
-    if (!canvas) return { x: 0, y: 0 };
-
-    const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
-
-    if ('touches' in e) {
-      const touch = e.touches[0] || e.changedTouches[0];
-      return {
-        x: (touch.clientX - rect.left) * scaleX,
-        y: (touch.clientY - rect.top) * scaleY,
+      // Calculate the actual center of the drawn points (centroid)
+      const actualCenter = {
+        x: drawnPoints.reduce((sum, p) => sum + p.x, 0) / drawnPoints.length,
+        y: drawnPoints.reduce((sum, p) => sum + p.y, 0) / drawnPoints.length,
       };
-    } else {
-      return {
-        x: (e.clientX - rect.left) * scaleX,
-        y: (e.clientY - rect.top) * scaleY,
-      };
-    }
-  }, []);
 
-  const startDrawing = useCallback((e: React.MouseEvent | React.TouchEvent) => {
-    e.preventDefault();
-    const point = getEventPosition(e);
-    setCenterPoint(point);
-    setIsDrawing(true);
-    setPoints([point]);
-    setScore(null);
-    setShowResult(false);
-  }, [getEventPosition]);
+      // Calculate the average radius from the actual center
+      const radii = drawnPoints.map((point) =>
+        Math.sqrt(
+          Math.pow(point.x - actualCenter.x, 2) +
+            Math.pow(point.y - actualCenter.y, 2),
+        ),
+      );
+      const avgRadius = radii.reduce((sum, r) => sum + r, 0) / radii.length;
 
-  const draw = useCallback((e: React.MouseEvent | React.TouchEvent) => {
-    e.preventDefault();
-    if (!isDrawing) return;
+      // Calculate how much each point deviates from the average radius
+      const deviations = radii.map((radius) => Math.abs(radius - avgRadius));
+      const avgDeviation =
+        deviations.reduce((sum, d) => sum + d, 0) / deviations.length;
 
-    const point = getEventPosition(e);
-    setPoints(prev => [...prev, point]);
-  }, [isDrawing, getEventPosition]);
+      // More forgiving scoring system
+      const relativeDeviation = avgDeviation / avgRadius; // 0 = perfect, 1 = very bad
+
+      console.log("Debug info:", {
+        pointCount: drawnPoints.length,
+        avgRadius: avgRadius.toFixed(2),
+        avgDeviation: avgDeviation.toFixed(2),
+        relativeDeviation: relativeDeviation.toFixed(3),
+      });
+
+      // Convert to percentage (more generous curve)
+      let accuracy;
+      if (relativeDeviation <= 0.05) {
+        // Very good (within 5%)
+        accuracy = 100 - (relativeDeviation / 0.05) * 10; // 90-100%
+      } else if (relativeDeviation <= 0.15) {
+        // Good (5-15%)
+        accuracy = 90 - ((relativeDeviation - 0.05) / 0.1) * 30; // 60-90%
+      } else if (relativeDeviation <= 0.3) {
+        // Okay (15-30%)
+        accuracy = 60 - ((relativeDeviation - 0.15) / 0.15) * 40; // 20-60%
+      } else {
+        // Poor (30%+)
+        accuracy = Math.max(0, 20 - ((relativeDeviation - 0.3) / 0.2) * 20); // 0-20%
+      }
+
+      console.log("Final accuracy:", accuracy.toFixed(1));
+      return Math.min(100, Math.max(0, accuracy));
+    },
+    [],
+  );
+
+  const getEventPosition = useCallback(
+    (e: React.MouseEvent | React.TouchEvent): Point => {
+      const canvas = canvasRef.current;
+      if (!canvas) return { x: 0, y: 0 };
+
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+
+      if ("touches" in e) {
+        const touch = e.touches[0] || e.changedTouches[0];
+        return {
+          x: (touch.clientX - rect.left) * scaleX,
+          y: (touch.clientY - rect.top) * scaleY,
+        };
+      } else {
+        return {
+          x: (e.clientX - rect.left) * scaleX,
+          y: (e.clientY - rect.top) * scaleY,
+        };
+      }
+    },
+    [],
+  );
+
+  const startDrawing = useCallback(
+    (e: React.MouseEvent | React.TouchEvent) => {
+      e.preventDefault();
+      const point = getEventPosition(e);
+      setCenterPoint(point);
+      setIsDrawing(true);
+      setPoints([point]);
+      setScore(null);
+      setShowResult(false);
+    },
+    [getEventPosition],
+  );
+
+  const draw = useCallback(
+    (e: React.MouseEvent | React.TouchEvent) => {
+      e.preventDefault();
+      if (!isDrawing) return;
+
+      const point = getEventPosition(e);
+      setPoints((prev) => [...prev, point]);
+    },
+    [isDrawing, getEventPosition],
+  );
 
   const stopDrawing = useCallback(async () => {
     if (!isDrawing || points.length < 5) {
@@ -136,12 +158,20 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
           await refreshUserBestScore();
         }
       } catch (error) {
-        console.error('Error submitting score:', error);
+        console.error("Error submitting score:", error);
       } finally {
         setIsSubmittingScore(false);
       }
     }
-  }, [isDrawing, points, centerPoint, calculateCircleAccuracy, user, userBestScore, refreshUserBestScore]);
+  }, [
+    isDrawing,
+    points,
+    centerPoint,
+    calculateCircleAccuracy,
+    user,
+    userBestScore,
+    refreshUserBestScore,
+  ]);
 
   const resetCanvas = useCallback(() => {
     setPoints([]);
@@ -152,7 +182,7 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
     setIsNewBest(false);
 
     const canvas = canvasRef.current;
-    const ctx = canvas?.getContext('2d');
+    const ctx = canvas?.getContext("2d");
     if (ctx && canvas) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
@@ -160,7 +190,7 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const ctx = canvas?.getContext('2d');
+    const ctx = canvas?.getContext("2d");
     if (!ctx || !canvas) return;
 
     // Clear canvas
@@ -168,10 +198,10 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
 
     // Draw the path
     if (points.length > 1) {
-      ctx.strokeStyle = '#FACC15';
+      ctx.strokeStyle = "#FACC15";
       ctx.lineWidth = 3;
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
 
       ctx.beginPath();
       ctx.moveTo(points[0].x, points[0].y);
@@ -189,12 +219,15 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
         y: points.reduce((sum, p) => sum + p.y, 0) / points.length,
       };
 
-      const radii = points.map(point =>
-        Math.sqrt(Math.pow(point.x - actualCenter.x, 2) + Math.pow(point.y - actualCenter.y, 2))
+      const radii = points.map((point) =>
+        Math.sqrt(
+          Math.pow(point.x - actualCenter.x, 2) +
+            Math.pow(point.y - actualCenter.y, 2),
+        ),
       );
       const avgRadius = radii.reduce((sum, r) => sum + r, 0) / radii.length;
 
-      ctx.strokeStyle = '#10B981';
+      ctx.strokeStyle = "#10B981";
       ctx.lineWidth = 2;
       ctx.setLineDash([5, 5]);
       ctx.beginPath();
@@ -205,63 +238,71 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
   }, [points, showResult, centerPoint]);
 
   const getScoreColor = (score: number): string => {
-    if (score >= 90) return 'text-green-400';
-    if (score >= 70) return 'text-yellow-400';
-    if (score >= 50) return 'text-orange-400';
-    return 'text-red-400';
+    if (score >= 90) return "text-green-400";
+    if (score >= 70) return "text-yellow-400";
+    if (score >= 50) return "text-orange-400";
+    return "text-red-400";
   };
 
   const getScoreMessage = (score: number): string => {
-    if (score >= 95) return 'Perfect! 🎯';
-    if (score >= 90) return 'Excellent! 🌟';
-    if (score >= 80) return 'Great! 👍';
-    if (score >= 70) return 'Good! 👌';
-    if (score >= 60) return 'Not bad! 🙂';
-    if (score >= 50) return 'Keep trying! 💪';
-    return 'Practice more! 📈';
+    if (score >= 95) return "Perfect! 🎯";
+    if (score >= 90) return "Excellent! 🌟";
+    if (score >= 80) return "Great! 👍";
+    if (score >= 70) return "Good! 👌";
+    if (score >= 60) return "Not bad! 🙂";
+    if (score >= 50) return "Keep trying! 💪";
+    return "Practice more! 📈";
   };
 
   return (
     <div className="flex flex-col items-center">
       {/* Compact Mobile Header */}
       <div className="text-center mb-6 w-full">
-        <div className={`inline-flex items-center space-x-2 px-3 py-1.5 rounded-full mb-3 ${
-          isDark
-            ? 'bg-gradient-to-r from-purple-800/30 to-pink-800/30'
-            : 'bg-gradient-to-r from-purple-100 to-pink-100'
-        }`}>
+        <div
+          className={`inline-flex items-center space-x-2 px-3 py-1.5 rounded-full mb-3 ${
+            isDark
+              ? "bg-gradient-to-r from-purple-800/30 to-pink-800/30"
+              : "bg-gradient-to-r from-purple-100 to-pink-100"
+          }`}
+        >
           <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
-          <span className={`text-xs font-medium ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+          <span
+            className={`text-xs font-medium ${isDark ? "text-slate-300" : "text-slate-700"}`}
+          >
             Challenge Your Precision
           </span>
         </div>
-        <h1 className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-2 ${
-          isDark
-            ? 'bg-gradient-to-r from-slate-100 via-purple-200 to-slate-100 bg-clip-text text-transparent'
-            : 'bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 bg-clip-text text-transparent'
-        }`}>
+        <h1
+          className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-2 ${
+            isDark
+              ? "bg-gradient-to-r from-slate-100 via-purple-200 to-slate-100 bg-clip-text text-transparent"
+              : "bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 bg-clip-text text-transparent"
+          }`}
+        >
           Perfect Circle
         </h1>
-        <p className={`text-sm sm:text-base px-4 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+        <p
+          className={`text-sm sm:text-base px-4 ${isDark ? "text-slate-400" : "text-slate-600"}`}
+        >
           Draw the most perfect circle you can
         </p>
       </div>
 
       {/* Game Canvas - Full Width Responsive */}
       <div className="relative mb-6 w-full px-4">
-        <div className={`rounded-2xl shadow-xl p-4 border transition-colors duration-300 ${
-          isDark
-            ? 'bg-gray-800 border-gray-700'
-            : 'bg-white border-slate-200'
-        }`}>
+        <div
+          className={`rounded-2xl shadow-xl p-4 border transition-colors duration-300 ${
+            isDark ? "bg-gray-800 border-gray-700" : "bg-white border-slate-200"
+          }`}
+        >
           <canvas
             ref={canvasRef}
             width={400}
             height={400}
             className={`w-full aspect-square max-w-md mx-auto rounded-xl cursor-crosshair touch-none shadow-inner border-2 transition-colors duration-300 ${
               isDark
-                ? 'bg-gray-900 border-gray-700'
-                : 'bg-slate-50 border-slate-100'
+                ? "bg-gray-900 border-gray-700"
+                : "bg-slate-50 border-slate-100"
             }`}
             onMouseDown={startDrawing}
             onMouseMove={draw}
@@ -278,10 +319,14 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
                 <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mb-3 mx-auto shadow-lg">
                   <span className="text-white text-lg">⭕</span>
                 </div>
-                <p className={`font-medium text-sm ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                <p
+                  className={`font-medium text-sm ${isDark ? "text-slate-300" : "text-slate-600"}`}
+                >
                   Tap and drag to draw
                 </p>
-                <p className={`text-xs mt-1 ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+                <p
+                  className={`text-xs mt-1 ${isDark ? "text-slate-500" : "text-slate-400"}`}
+                >
                   Make the most perfect circle
                 </p>
               </div>
@@ -291,36 +336,48 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
       </div>
 
       {showResult && score !== null && (
-        <div className={`rounded-2xl shadow-xl p-6 border mb-6 max-w-md mx-auto transition-colors duration-300 ${
-          isDark
-            ? 'bg-gray-800 border-gray-700'
-            : 'bg-white border-slate-200'
-        }`}>
+        <div
+          className={`rounded-2xl shadow-xl p-6 border mb-6 max-w-md mx-auto transition-colors duration-300 ${
+            isDark ? "bg-gray-800 border-gray-700" : "bg-white border-slate-200"
+          }`}
+        >
           <div className="text-center">
-            <div className={`text-5xl sm:text-6xl font-bold mb-4 ${getScoreColor(score)}`}>
+            <div
+              className={`text-5xl sm:text-6xl font-bold mb-4 ${getScoreColor(score)}`}
+            >
               {score.toFixed(1)}%
             </div>
 
             {/* Rating Bar 0-100% */}
             <div className="w-full mb-4">
-              <div className={`flex justify-between text-xs mb-2 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+              <div
+                className={`flex justify-between text-xs mb-2 ${isDark ? "text-slate-400" : "text-slate-500"}`}
+              >
                 <span>0%</span>
                 <span className="font-medium">Accuracy</span>
                 <span>100%</span>
               </div>
-              <div className={`w-full rounded-full h-3 overflow-hidden shadow-inner ${
-                isDark ? 'bg-gray-700' : 'bg-slate-100'
-              }`}>
+              <div
+                className={`w-full rounded-full h-3 overflow-hidden shadow-inner ${
+                  isDark ? "bg-gray-700" : "bg-slate-100"
+                }`}
+              >
                 <div
                   className={`h-full transition-all duration-1000 ease-out shadow-sm ${
-                    score >= 90 ? 'bg-gradient-to-r from-green-400 to-green-500' :
-                    score >= 70 ? 'bg-gradient-to-r from-yellow-400 to-yellow-500' :
-                    score >= 50 ? 'bg-gradient-to-r from-orange-400 to-orange-500' : 'bg-gradient-to-r from-red-400 to-red-500'
+                    score >= 90
+                      ? "bg-gradient-to-r from-green-400 to-green-500"
+                      : score >= 70
+                        ? "bg-gradient-to-r from-yellow-400 to-yellow-500"
+                        : score >= 50
+                          ? "bg-gradient-to-r from-orange-400 to-orange-500"
+                          : "bg-gradient-to-r from-red-400 to-red-500"
                   }`}
                   style={{ width: `${score}%` }}
                 />
               </div>
-              <div className={`flex justify-between text-xs mt-1 ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+              <div
+                className={`flex justify-between text-xs mt-1 ${isDark ? "text-slate-500" : "text-slate-400"}`}
+              >
                 <span>Poor</span>
                 <span>Good</span>
                 <span>Perfect</span>
@@ -328,7 +385,9 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
             </div>
 
             <div className="space-y-3">
-              <p className={`text-lg sm:text-xl font-semibold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+              <p
+                className={`text-lg sm:text-xl font-semibold ${isDark ? "text-slate-200" : "text-slate-800"}`}
+              >
                 {getScoreMessage(score)}
                 {isNewBest && (
                   <span className="block mt-2">
@@ -341,13 +400,17 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
               </p>
 
               {isSubmittingScore && (
-                <p className={`text-sm flex items-center justify-center space-x-2 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                <p
+                  className={`text-sm flex items-center justify-center space-x-2 ${isDark ? "text-slate-400" : "text-slate-600"}`}
+                >
                   <span className="w-3 h-3 border-2 border-purple-500 border-t-transparent rounded-full animate-spin"></span>
                   <span>Saving...</span>
                 </p>
               )}
 
-              <p className={`text-xs ${isDark ? 'text-slate-500' : 'text-slate-500'}`}>
+              <p
+                className={`text-xs ${isDark ? "text-slate-500" : "text-slate-500"}`}
+              >
                 Green line shows perfect circle
               </p>
             </div>
@@ -360,7 +423,7 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
           onClick={resetCanvas}
           className="w-full px-6 py-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-xl font-semibold hover:from-yellow-500 hover:to-orange-600 transition-all duration-200 shadow-lg"
         >
-          {showResult ? '🎯 Try Again' : '🧹 Clear Canvas'}
+          {showResult ? "🎯 Try Again" : "🧹 Clear Canvas"}
         </button>
 
         {onShowLeaderboard && (
@@ -376,13 +439,21 @@ export const PerfectCircle: React.FC<PerfectCircleProps> = ({ onShowLeaderboard 
       <div className="mt-8 max-w-md mx-auto">
         <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4 border border-blue-100">
           <h3 className="text-sm font-semibold text-slate-800 mb-3 flex items-center justify-center">
-            <span className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs mr-2">💡</span>
+            <span className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs mr-2">
+              💡
+            </span>
             Quick Tips
           </h3>
           <div className="space-y-2 text-xs text-center">
-            <p className="text-slate-700">💪 <strong>Use your whole arm</strong> for smoother circles</p>
-            <p className="text-slate-700">🎯 <strong>Keep steady speed</strong> while drawing</p>
-            <p className="text-slate-700">🔄 <strong>Practice makes perfect!</strong></p>
+            <p className="text-slate-700">
+              💪 <strong>Use your whole arm</strong> for smoother circles
+            </p>
+            <p className="text-slate-700">
+              🎯 <strong>Keep steady speed</strong> while drawing
+            </p>
+            <p className="text-slate-700">
+              🔄 <strong>Practice makes perfect!</strong>
+            </p>
           </div>
         </div>
       </div>

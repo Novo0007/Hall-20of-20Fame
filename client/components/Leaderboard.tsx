@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Database, Score } from '../lib/supabase';
-import { useUser } from '../contexts/UserContext';
-import { useTheme } from '../contexts/ThemeContext';
+import React, { useState, useEffect } from "react";
+import { Database, Score } from "../lib/supabase";
+import { useUser } from "../contexts/UserContext";
+import { useTheme } from "../contexts/ThemeContext";
 
 export const Leaderboard: React.FC = () => {
   const [scores, setScores] = useState<Score[]>([]);
@@ -19,7 +19,7 @@ export const Leaderboard: React.FC = () => {
       const leaderboard = await Database.getLeaderboard(10);
       setScores(leaderboard);
     } catch (error) {
-      console.error('Error loading leaderboard:', error);
+      console.error("Error loading leaderboard:", error);
     } finally {
       setIsLoading(false);
     }
@@ -27,47 +27,57 @@ export const Leaderboard: React.FC = () => {
 
   const getPositionMedal = (position: number): string => {
     switch (position) {
-      case 1: return '🥇';
-      case 2: return '🥈';
-      case 3: return '🥉';
-      default: return `#${position}`;
+      case 1:
+        return "🥇";
+      case 2:
+        return "🥈";
+      case 3:
+        return "🥉";
+      default:
+        return `#${position}`;
     }
   };
 
   const getScoreColor = (score: number): string => {
-    if (score >= 90) return 'text-green-400';
-    if (score >= 70) return 'text-yellow-400';
-    if (score >= 50) return 'text-orange-400';
-    return 'text-red-400';
+    if (score >= 90) return "text-green-400";
+    if (score >= 70) return "text-yellow-400";
+    if (score >= 50) return "text-orange-400";
+    return "text-red-400";
   };
 
   return (
     <div className="w-full max-w-4xl mx-auto px-4">
       {/* Header */}
       <div className="text-center mb-8 px-4">
-        <div className={`inline-flex items-center space-x-2 px-3 py-1.5 rounded-full mb-4 ${
-          isDark
-            ? 'bg-gradient-to-r from-yellow-800/30 to-orange-800/30'
-            : 'bg-gradient-to-r from-yellow-100 to-orange-100'
-        }`}>
+        <div
+          className={`inline-flex items-center space-x-2 px-3 py-1.5 rounded-full mb-4 ${
+            isDark
+              ? "bg-gradient-to-r from-yellow-800/30 to-orange-800/30"
+              : "bg-gradient-to-r from-yellow-100 to-orange-100"
+          }`}
+        >
           <span className="w-1.5 h-1.5 bg-yellow-500 rounded-full animate-pulse"></span>
-          <span className={`text-xs font-medium ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+          <span
+            className={`text-xs font-medium ${isDark ? "text-slate-300" : "text-slate-700"}`}
+          >
             Global Competition
           </span>
         </div>
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text text-transparent mb-2">
           🏆 Leaderboard
         </h1>
-        <p className={`text-sm sm:text-base ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+        <p
+          className={`text-sm sm:text-base ${isDark ? "text-slate-400" : "text-slate-600"}`}
+        >
           Top 10 Perfect Circle Masters
         </p>
       </div>
 
-      <div className={`rounded-3xl shadow-2xl border overflow-hidden transition-colors duration-300 ${
-        isDark
-          ? 'bg-gray-800 border-gray-700'
-          : 'bg-white border-slate-200'
-      }`}>
+      <div
+        className={`rounded-3xl shadow-2xl border overflow-hidden transition-colors duration-300 ${
+          isDark ? "bg-gray-800 border-gray-700" : "bg-white border-slate-200"
+        }`}
+      >
         <div className="bg-gradient-to-r from-yellow-500 to-orange-500 p-4 sm:p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2 sm:space-x-3">
@@ -75,8 +85,12 @@ export const Leaderboard: React.FC = () => {
                 <span className="text-white text-xl sm:text-2xl">👑</span>
               </div>
               <div>
-                <h2 className="text-lg sm:text-2xl font-bold text-white">Hall of Fame</h2>
-                <p className="text-orange-100 text-xs sm:text-sm">Top scoring players</p>
+                <h2 className="text-lg sm:text-2xl font-bold text-white">
+                  Hall of Fame
+                </h2>
+                <p className="text-orange-100 text-xs sm:text-sm">
+                  Top scoring players
+                </p>
               </div>
             </div>
             <button
@@ -105,18 +119,26 @@ export const Leaderboard: React.FC = () => {
               <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mb-4 mx-auto animate-pulse">
                 <span className="text-white text-2xl">⭕</span>
               </div>
-              <p className="text-slate-600 font-medium">Loading global rankings...</p>
+              <p className="text-slate-600 font-medium">
+                Loading global rankings...
+              </p>
             </div>
           ) : scores.length === 0 ? (
             <div className="text-center py-16">
               <div className="w-20 h-20 bg-gradient-to-br from-slate-200 to-slate-300 rounded-full flex items-center justify-center mb-6 mx-auto">
                 <span className="text-slate-500 text-3xl">🎯</span>
               </div>
-              <h3 className="text-xl font-semibold text-slate-800 mb-2">No champions yet!</h3>
-              <p className="text-slate-600 mb-4">Be the first to claim the throne</p>
+              <h3 className="text-xl font-semibold text-slate-800 mb-2">
+                No champions yet!
+              </h3>
+              <p className="text-slate-600 mb-4">
+                Be the first to claim the throne
+              </p>
               <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-purple-100 to-pink-100 px-4 py-2 rounded-full">
                 <span className="text-purple-600">👑</span>
-                <span className="text-purple-800 font-medium">First place awaits you</span>
+                <span className="text-purple-800 font-medium">
+                  First place awaits you
+                </span>
               </div>
             </div>
           ) : (
@@ -131,10 +153,10 @@ export const Leaderboard: React.FC = () => {
                     key={score.id}
                     className={`relative overflow-hidden rounded-2xl transition-all duration-200 hover:scale-[1.02] ${
                       isPodium
-                        ? 'bg-gradient-to-r from-yellow-50 to-orange-50 border-2 border-yellow-200 shadow-lg'
+                        ? "bg-gradient-to-r from-yellow-50 to-orange-50 border-2 border-yellow-200 shadow-lg"
                         : isCurrentUser
-                        ? 'bg-gradient-to-r from-purple-50 to-pink-50 border-2 border-purple-200 shadow-md'
-                        : 'bg-slate-50 border border-slate-200 hover:bg-slate-100'
+                          ? "bg-gradient-to-r from-purple-50 to-pink-50 border-2 border-purple-200 shadow-md"
+                          : "bg-slate-50 border border-slate-200 hover:bg-slate-100"
                     }`}
                   >
                     {isPodium && (
@@ -143,26 +165,42 @@ export const Leaderboard: React.FC = () => {
 
                     <div className="flex items-center justify-between p-4 sm:p-6">
                       <div className="flex items-center space-x-3 sm:space-x-4">
-                        <div className={`flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-xl font-bold text-sm sm:text-lg ${
-                          position === 1 ? 'bg-gradient-to-br from-yellow-400 to-yellow-600 text-white' :
-                          position === 2 ? 'bg-gradient-to-br from-gray-300 to-gray-500 text-white' :
-                          position === 3 ? 'bg-gradient-to-br from-orange-400 to-orange-600 text-white' :
-                          'bg-slate-200 text-slate-700'
-                        }`}>
-                          {position <= 3 ? getPositionMedal(position) : `#${position}`}
+                        <div
+                          className={`flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-xl font-bold text-sm sm:text-lg ${
+                            position === 1
+                              ? "bg-gradient-to-br from-yellow-400 to-yellow-600 text-white"
+                              : position === 2
+                                ? "bg-gradient-to-br from-gray-300 to-gray-500 text-white"
+                                : position === 3
+                                  ? "bg-gradient-to-br from-orange-400 to-orange-600 text-white"
+                                  : "bg-slate-200 text-slate-700"
+                          }`}
+                        >
+                          {position <= 3
+                            ? getPositionMedal(position)
+                            : `#${position}`}
                         </div>
 
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center space-x-2 mb-1">
-                            <p className={`text-sm sm:text-lg font-semibold truncate ${
-                              isPodium ? 'text-orange-900' :
-                              isCurrentUser ? 'text-purple-900' :
-                              isDark ? 'text-slate-200' : 'text-slate-800'
-                            }`}>
-                              {score.user?.name || 'Unknown Player'}
+                            <p
+                              className={`text-sm sm:text-lg font-semibold truncate ${
+                                isPodium
+                                  ? "text-orange-900"
+                                  : isCurrentUser
+                                    ? "text-purple-900"
+                                    : isDark
+                                      ? "text-slate-200"
+                                      : "text-slate-800"
+                              }`}
+                            >
+                              {score.user?.name || "Unknown Player"}
                             </p>
                             {score.user?.country_flag && (
-                              <span className="text-sm shrink-0" title={score.user.country_name}>
+                              <span
+                                className="text-sm shrink-0"
+                                title={score.user.country_name}
+                              >
                                 {score.user.country_flag}
                               </span>
                             )}
@@ -179,22 +217,31 @@ export const Leaderboard: React.FC = () => {
                             </span>
                           )}
                           <p className="text-slate-500 text-xs">
-                            {new Date(score.created_at).toLocaleDateString('en-US', {
-                              month: 'short',
-                              day: 'numeric'
-                            })}
+                            {new Date(score.created_at).toLocaleDateString(
+                              "en-US",
+                              {
+                                month: "short",
+                                day: "numeric",
+                              },
+                            )}
                           </p>
                         </div>
                       </div>
 
                       <div className="text-right shrink-0">
-                        <div className={`text-xl sm:text-3xl font-bold mb-1 ${getScoreColor(score.score)}`}>
+                        <div
+                          className={`text-xl sm:text-3xl font-bold mb-1 ${getScoreColor(score.score)}`}
+                        >
                           {score.score.toFixed(1)}%
                         </div>
                         <div className="text-slate-500 text-xs sm:text-sm">
-                          {score.score >= 90 ? 'Perfect' :
-                           score.score >= 70 ? 'Great' :
-                           score.score >= 50 ? 'Good' : 'Fair'}
+                          {score.score >= 90
+                            ? "Perfect"
+                            : score.score >= 70
+                              ? "Great"
+                              : score.score >= 50
+                                ? "Good"
+                                : "Fair"}
                         </div>
                       </div>
                     </div>
@@ -215,9 +262,7 @@ export const Leaderboard: React.FC = () => {
               <span className="hidden sm:inline">•</span>
               <span>Best score per player</span>
             </div>
-            <div className="text-slate-500">
-              Updated in real-time
-            </div>
+            <div className="text-slate-500">Updated in real-time</div>
           </div>
         </div>
       </div>

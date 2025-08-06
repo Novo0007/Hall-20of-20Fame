@@ -1,6 +1,12 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { Database, User } from '../lib/supabase';
-import { Country } from '../lib/countries';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import { Database, User } from "../lib/supabase";
+import { Country } from "../lib/countries";
 
 interface UserContextType {
   user: User | null;
@@ -18,7 +24,7 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export const useUser = () => {
   const context = useContext(UserContext);
   if (context === undefined) {
-    throw new Error('useUser must be used within a UserProvider');
+    throw new Error("useUser must be used within a UserProvider");
   }
   return context;
 };
@@ -29,15 +35,15 @@ interface UserProviderProps {
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [userName, setUserNameState] = useState<string>('Anonymous');
+  const [userName, setUserNameState] = useState<string>("Anonymous");
   const [userCountry, setUserCountryState] = useState<Country | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [userBestScore, setUserBestScore] = useState<number>(0);
 
   // Load user data from localStorage on mount
   useEffect(() => {
-    const savedName = localStorage.getItem('perfect-circle-username');
-    const savedCountry = localStorage.getItem('perfect-circle-country');
+    const savedName = localStorage.getItem("perfect-circle-username");
+    const savedCountry = localStorage.getItem("perfect-circle-country");
 
     if (savedName) {
       setUserNameState(savedName);
@@ -49,7 +55,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         const country = JSON.parse(savedCountry) as Country;
         setUserCountryState(country);
       } catch (error) {
-        console.error('Failed to parse saved country:', error);
+        console.error("Failed to parse saved country:", error);
       }
     }
   }, []);
@@ -57,11 +63,13 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const handleUserNameChange = async (name: string) => {
     setIsLoading(true);
     try {
-      const countryData = userCountry ? {
-        code: userCountry.code,
-        name: userCountry.name,
-        flag: userCountry.flag
-      } : undefined;
+      const countryData = userCountry
+        ? {
+            code: userCountry.code,
+            name: userCountry.name,
+            flag: userCountry.flag,
+          }
+        : undefined;
 
       const userData = await Database.getOrCreateUser(name, countryData);
       if (userData) {
@@ -70,7 +78,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         setUserBestScore(bestScore);
       }
     } catch (error) {
-      console.error('Error setting user:', error);
+      console.error("Error setting user:", error);
     } finally {
       setIsLoading(false);
     }
@@ -78,13 +86,13 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
   const setUserName = async (name: string) => {
     setUserNameState(name);
-    localStorage.setItem('perfect-circle-username', name);
+    localStorage.setItem("perfect-circle-username", name);
     await handleUserNameChange(name);
   };
 
   const setUserCountry = async (country: Country) => {
     setUserCountryState(country);
-    localStorage.setItem('perfect-circle-country', JSON.stringify(country));
+    localStorage.setItem("perfect-circle-country", JSON.stringify(country));
 
     // Update user in database if user exists
     if (user) {
@@ -97,14 +105,18 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         });
 
         // Update local user state
-        setUser(prev => prev ? {
-          ...prev,
-          country_code: country.code,
-          country_name: country.name,
-          country_flag: country.flag,
-        } : null);
+        setUser((prev) =>
+          prev
+            ? {
+                ...prev,
+                country_code: country.code,
+                country_name: country.name,
+                country_flag: country.flag,
+              }
+            : null,
+        );
       } catch (error) {
-        console.error('Error updating user country:', error);
+        console.error("Error updating user country:", error);
       } finally {
         setIsLoading(false);
       }

@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from "@supabase/supabase-js";
 
 // Get environment variables
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -8,13 +8,15 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 const isValidUrl = (url: string) => {
   try {
     new URL(url);
-    return url.includes('supabase.co');
+    return url.includes("supabase.co");
   } catch {
     return false;
   }
 };
 
-const isSupabaseConfigured = supabaseUrl && supabaseAnonKey &&
+const isSupabaseConfigured =
+  supabaseUrl &&
+  supabaseAnonKey &&
   isValidUrl(supabaseUrl) &&
   supabaseAnonKey.length > 20; // Basic validation for anon key
 
@@ -47,11 +49,14 @@ export interface Score {
 // Database operations
 export class Database {
   // Get or create user by name
-  static async getOrCreateUser(name: string, country?: { code: string; name: string; flag: string }): Promise<User | null> {
+  static async getOrCreateUser(
+    name: string,
+    country?: { code: string; name: string; flag: string },
+  ): Promise<User | null> {
     if (!supabase) {
-      console.warn('Supabase not configured - using mock user');
+      console.warn("Supabase not configured - using mock user");
       return {
-        id: 'mock-user-' + name.toLowerCase().replace(/\s+/g, '-'),
+        id: "mock-user-" + name.toLowerCase().replace(/\s+/g, "-"),
         name,
         created_at: new Date().toISOString(),
         country_code: country?.code,
@@ -63,16 +68,16 @@ export class Database {
     try {
       // First, try to find existing user by name
       const { data: existingUser, error: findError } = await supabase
-        .from('users')
-        .select('*')
-        .eq('name', name)
+        .from("users")
+        .select("*")
+        .eq("name", name)
         .single();
 
       // Handle schema cache issues
-      if (findError?.code === 'PGRST205') {
-        console.warn('Schema cache not ready, using temporary user');
+      if (findError?.code === "PGRST205") {
+        console.warn("Schema cache not ready, using temporary user");
         return {
-          id: 'temp-user-' + name.toLowerCase().replace(/\s+/g, '-'),
+          id: "temp-user-" + name.toLowerCase().replace(/\s+/g, "-"),
           name,
           created_at: new Date().toISOString(),
         };
@@ -91,29 +96,32 @@ export class Database {
       }
 
       const { data: newUser, error: createError } = await supabase
-        .from('users')
+        .from("users")
         .insert([userData])
         .select()
         .single();
 
       // Handle schema cache issues
-      if (createError?.code === 'PGRST205') {
-        console.warn('Schema cache not ready, using temporary user');
+      if (createError?.code === "PGRST205") {
+        console.warn("Schema cache not ready, using temporary user");
         return {
-          id: 'temp-user-' + name.toLowerCase().replace(/\s+/g, '-'),
+          id: "temp-user-" + name.toLowerCase().replace(/\s+/g, "-"),
           name,
           created_at: new Date().toISOString(),
         };
       }
 
       if (createError) {
-        console.error('Error creating user:', JSON.stringify(createError, null, 2));
+        console.error(
+          "Error creating user:",
+          JSON.stringify(createError, null, 2),
+        );
         return null;
       }
 
       return newUser;
     } catch (error) {
-      console.error('Error in getOrCreateUser:', error);
+      console.error("Error in getOrCreateUser:", error);
       return null;
     }
   }
@@ -121,29 +129,32 @@ export class Database {
   // Submit a new score for a user
   static async submitScore(userId: string, score: number): Promise<boolean> {
     if (!supabase) {
-      console.warn('Supabase not configured - score not saved');
+      console.warn("Supabase not configured - score not saved");
       return true; // Return true to not break the flow
     }
 
     try {
       const { error } = await supabase
-        .from('scores')
+        .from("scores")
         .insert([{ user_id: userId, score }]);
 
       // Handle schema cache issues
-      if (error?.code === 'PGRST205') {
-        console.warn('Schema cache not ready, score not saved yet');
+      if (error?.code === "PGRST205") {
+        console.warn("Schema cache not ready, score not saved yet");
         return true; // Return true to not break the game flow
       }
 
       if (error) {
-        console.error('Error submitting score:', JSON.stringify(error, null, 2));
+        console.error(
+          "Error submitting score:",
+          JSON.stringify(error, null, 2),
+        );
         return false;
       }
 
       return true;
     } catch (error) {
-      console.error('Error in submitScore:', error);
+      console.error("Error in submitScore:", error);
       return false;
     }
   }
@@ -151,30 +162,35 @@ export class Database {
   // Get highest score for each user (leaderboard)
   static async getLeaderboard(limit: number = 10): Promise<Score[]> {
     if (!supabase) {
-      console.warn('Supabase not configured - returning empty leaderboard');
+      console.warn("Supabase not configured - returning empty leaderboard");
       return [];
     }
 
     try {
       const { data, error } = await supabase
-        .from('scores')
-        .select(`
+        .from("scores")
+        .select(
+          `
           id,
           user_id,
           score,
           created_at,
           user:users(id, name, created_at)
-        `)
-        .order('score', { ascending: false });
+        `,
+        )
+        .order("score", { ascending: false });
 
       // Handle schema cache issues
-      if (error?.code === 'PGRST205') {
-        console.warn('Schema cache not ready, showing empty leaderboard');
+      if (error?.code === "PGRST205") {
+        console.warn("Schema cache not ready, showing empty leaderboard");
         return [];
       }
 
       if (error) {
-        console.error('Error fetching leaderboard:', JSON.stringify(error, null, 2));
+        console.error(
+          "Error fetching leaderboard:",
+          JSON.stringify(error, null, 2),
+        );
         return [];
       }
 
@@ -193,7 +209,7 @@ export class Database {
         .sort((a, b) => b.score - a.score)
         .slice(0, limit);
     } catch (error) {
-      console.error('Error in getLeaderboard:', error);
+      console.error("Error in getLeaderboard:", error);
       return [];
     }
   }
@@ -206,10 +222,10 @@ export class Database {
 
     try {
       const { data, error } = await supabase
-        .from('scores')
-        .select('score')
-        .eq('user_id', userId)
-        .order('score', { ascending: false })
+        .from("scores")
+        .select("score")
+        .eq("user_id", userId)
+        .order("score", { ascending: false })
         .limit(1)
         .single();
 
@@ -219,32 +235,35 @@ export class Database {
 
       return data.score;
     } catch (error) {
-      console.error('Error getting user best score:', error);
+      console.error("Error getting user best score:", error);
       return 0;
     }
   }
 
   // Update user information
-  static async updateUser(userId: string, updates: Partial<User>): Promise<boolean> {
+  static async updateUser(
+    userId: string,
+    updates: Partial<User>,
+  ): Promise<boolean> {
     if (!supabase) {
-      console.warn('Supabase not configured - user update not saved');
+      console.warn("Supabase not configured - user update not saved");
       return true;
     }
 
     try {
       const { error } = await supabase
-        .from('users')
+        .from("users")
         .update(updates)
-        .eq('id', userId);
+        .eq("id", userId);
 
       if (error) {
-        console.error('Error updating user:', JSON.stringify(error, null, 2));
+        console.error("Error updating user:", JSON.stringify(error, null, 2));
         return false;
       }
 
       return true;
     } catch (error) {
-      console.error('Error in updateUser:', error);
+      console.error("Error in updateUser:", error);
       return false;
     }
   }
