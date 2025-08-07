@@ -42,6 +42,7 @@ export interface Score {
   id: string;
   user_id: string;
   score: number;
+  game_type: string;
   created_at: string;
   user?: User;
 }
@@ -126,17 +127,32 @@ export class Database {
     }
   }
 
-  // Submit a new score for a user
-  static async submitScore(userId: string, score: number): Promise<boolean> {
+  // Submit a new score for a user (only if it's their best score)
+  static async submitScore(
+    userId: string,
+    score: number,
+    gameType: string = "perfect_circle",
+  ): Promise<boolean> {
     if (!supabase) {
       console.warn("Supabase not configured - score not saved");
       return true; // Return true to not break the flow
     }
 
     try {
+      // First check if user has a better score already for this game type
+      const currentBest = await this.getUserBestScore(userId, gameType);
+
+      // Only save if this is a new personal best
+      if (score <= currentBest) {
+        console.log(
+          `Score ${score} not saved - current best is ${currentBest}`,
+        );
+        return true; // Not an error, just not a new best
+      }
+
       const { error } = await supabase
         .from("scores")
-        .insert([{ user_id: userId, score }]);
+        .insert([{ user_id: userId, score, game_type: gameType }]);
 
       // Handle schema cache issues
       if (error?.code === "PGRST205") {
@@ -152,6 +168,7 @@ export class Database {
         return false;
       }
 
+      console.log(`New personal best saved: ${score}`);
       return true;
     } catch (error) {
       console.error("Error in submitScore:", error);
@@ -160,25 +177,35 @@ export class Database {
   }
 
   // Get highest score for each user (leaderboard)
-  static async getLeaderboard(limit: number = 10): Promise<Score[]> {
+  static async getLeaderboard(
+    limit: number = 10,
+    gameType?: string,
+  ): Promise<Score[]> {
     if (!supabase) {
       console.warn("Supabase not configured - returning empty leaderboard");
       return [];
     }
 
     try {
-      const { data, error } = await supabase
+      let query = supabase
         .from("scores")
         .select(
           `
           id,
           user_id,
           score,
+          game_type,
           created_at,
-          user:users(id, name, created_at)
+          user:users(id, name, created_at, country_code, country_name, country_flag)
         `,
         )
         .order("score", { ascending: false });
+
+      if (gameType) {
+        query = query.eq("game_type", gameType);
+      }
+
+      const { data, error } = await query;
 
       // Handle schema cache issues
       if (error?.code === "PGRST205") {
@@ -194,13 +221,14 @@ export class Database {
         return [];
       }
 
-      // Group by user and keep only highest score per user
+      // Group by user and game type, keep only highest score per user per game
       const userBestScores = new Map<string, Score>();
 
       data?.forEach((score) => {
-        const existingScore = userBestScores.get(score.user_id);
+        const key = `${score.user_id}_${score.game_type}`;
+        const existingScore = userBestScores.get(key);
         if (!existingScore || score.score > existingScore.score) {
-          userBestScores.set(score.user_id, score);
+          userBestScores.set(key, score);
         }
       });
 
@@ -215,7 +243,10 @@ export class Database {
   }
 
   // Get user's best score
-  static async getUserBestScore(userId: string): Promise<number> {
+  static async getUserBestScore(
+    userId: string,
+    gameType: string = "perfect_circle",
+  ): Promise<number> {
     if (!supabase) {
       return 0;
     }
@@ -225,6 +256,7 @@ export class Database {
         .from("scores")
         .select("score")
         .eq("user_id", userId)
+        .eq("game_type", gameType)
         .order("score", { ascending: false })
         .limit(1)
         .single();

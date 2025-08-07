@@ -16,7 +16,10 @@ interface UserContextType {
   setUserCountry: (country: Country) => Promise<void>;
   isLoading: boolean;
   userBestScore: number;
+  userBestScores: { [gameType: string]: number };
+  getUserBestScore: (gameType: string) => number;
   refreshUserBestScore: () => Promise<void>;
+  refreshUserBestScores: () => Promise<void>;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -39,6 +42,9 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [userCountry, setUserCountryState] = useState<Country | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [userBestScore, setUserBestScore] = useState<number>(0);
+  const [userBestScores, setUserBestScores] = useState<{
+    [gameType: string]: number;
+  }>({});
 
   // Load user data from localStorage on mount
   useEffect(() => {
@@ -74,8 +80,21 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
       const userData = await Database.getOrCreateUser(name, countryData);
       if (userData) {
         setUser(userData);
-        const bestScore = await Database.getUserBestScore(userData.id);
-        setUserBestScore(bestScore);
+        // Load best scores for all games
+        const perfectCircleScore = await Database.getUserBestScore(
+          userData.id,
+          "perfect_circle",
+        );
+        const balloonPopScore = await Database.getUserBestScore(
+          userData.id,
+          "balloon_pop",
+        );
+
+        setUserBestScore(perfectCircleScore); // Keep for backward compatibility
+        setUserBestScores({
+          perfect_circle: perfectCircleScore,
+          balloon_pop: balloonPopScore,
+        });
       }
     } catch (error) {
       console.error("Error setting user:", error);
@@ -125,8 +144,30 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
   const refreshUserBestScore = async () => {
     if (user) {
-      const bestScore = await Database.getUserBestScore(user.id);
+      const bestScore = await Database.getUserBestScore(
+        user.id,
+        "perfect_circle",
+      );
       setUserBestScore(bestScore);
+    }
+  };
+
+  const refreshUserBestScores = async () => {
+    if (user) {
+      const perfectCircleScore = await Database.getUserBestScore(
+        user.id,
+        "perfect_circle",
+      );
+      const balloonPopScore = await Database.getUserBestScore(
+        user.id,
+        "balloon_pop",
+      );
+
+      setUserBestScore(perfectCircleScore);
+      setUserBestScores({
+        perfect_circle: perfectCircleScore,
+        balloon_pop: balloonPopScore,
+      });
     }
   };
 
@@ -140,7 +181,10 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         setUserCountry,
         isLoading,
         userBestScore,
+        userBestScores,
+        getUserBestScore: (gameType: string) => userBestScores[gameType] || 0,
         refreshUserBestScore,
+        refreshUserBestScores,
       }}
     >
       {children}
