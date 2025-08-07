@@ -174,6 +174,21 @@ const GameContent: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Made In India Footer */}
+      <div className="fixed bottom-0 left-0 right-0 z-10">
+        <div className="flex justify-center pb-4">
+          <div className="px-6 py-3 bg-gradient-to-r from-orange-200 via-white to-green-200 rounded-full shadow-[0_8px_24px_rgba(0,0,0,0.15)] border border-orange-300/30 backdrop-blur-sm">
+            <div className="flex items-center space-x-2 text-sm font-semibold">
+              <span className="text-orange-600">Made In India</span>
+              <span className="text-slate-600">By</span>
+              <span className="text-purple-600 font-bold">NNC</span>
+              <span className="text-slate-600">With Love</span>
+              <span className="text-red-500 text-base animate-pulse">💖</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
