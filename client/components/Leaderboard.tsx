@@ -14,6 +14,13 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameFilter }) => {
   const { user } = useUser();
   const { isDark } = useTheme();
 
+  // Update selectedGame when gameFilter prop changes
+  useEffect(() => {
+    if (gameFilter) {
+      setSelectedGame(gameFilter);
+    }
+  }, [gameFilter]);
+
   useEffect(() => {
     loadLeaderboard();
   }, [selectedGame]);
