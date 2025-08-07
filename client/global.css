@@ -4,94 +4,112 @@
 
 @layer base {
   /**
-   * Tailwind CSS theme
-   * tailwind.config.ts expects the following color variables to be expressed as HSL values.
-   * A different format will require also updating the theme in tailwind.config.ts.
+   * Claymorphism Tailwind CSS theme
+   * Soft, 3D clay-like elements with vibrant pastel colors
+   * Friendly, playful, and accessible design
   */
   :root {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
+    /* Claymorphism Color Palette - Vibrant Pastels */
+    --background: 220 20% 97%;
+    --foreground: 240 10% 20%;
 
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
+    --card: 220 20% 98%;
+    --card-foreground: 240 10% 25%;
 
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 220 20% 98%;
+    --popover-foreground: 240 10% 25%;
 
-    --primary: 47 96% 53%;
-    --primary-foreground: 240 10% 3.9%;
+    /* Primary - Vibrant Pink/Purple */
+    --primary: 320 85% 65%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
+    /* Secondary - Soft Blue */
+    --secondary: 200 80% 85%;
+    --secondary-foreground: 220 20% 30%;
 
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
+    /* Muted - Light Lavender */
+    --muted: 250 30% 90%;
+    --muted-foreground: 240 10% 45%;
 
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
+    /* Accent - Bright Orange */
+    --accent: 30 95% 70%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
+    /* Destructive - Coral Red */
+    --destructive: 350 80% 65%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 47 96% 53%;
+    --border: 220 20% 85%;
+    --input: 220 20% 90%;
+    --ring: 320 85% 65%;
 
-    --radius: 0.75rem;
+    --radius: 1.5rem;
 
-    --sidebar-background: 0 0% 98%;
+    /* Sidebar Colors - Soft Pastels */
+    --sidebar-background: 190 50% 95%;
+    --sidebar-foreground: 200 20% 30%;
+    --sidebar-primary: 280 70% 70%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 160 40% 90%;
+    --sidebar-accent-foreground: 180 20% 30%;
+    --sidebar-border: 200 30% 80%;
+    --sidebar-ring: 280 70% 70%;
 
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Claymorphism Custom Colors */
+    --clay-pink: 330 70% 85%;
+    --clay-blue: 200 70% 85%;
+    --clay-green: 150 50% 85%;
+    --clay-yellow: 50 80% 85%;
+    --clay-purple: 270 60% 85%;
+    --clay-orange: 30 80% 85%;
   }
 
   .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
+    /* Dark Mode Claymorphism - Soft Dark Pastels */
+    --background: 240 20% 8%;
+    --foreground: 0 0% 95%;
 
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
+    --card: 240 20% 10%;
+    --card-foreground: 0 0% 95%;
 
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 240 20% 10%;
+    --popover-foreground: 0 0% 95%;
 
-    --primary: 47 96% 53%;
-    --primary-foreground: 240 10% 3.9%;
+    --primary: 320 70% 60%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 200 30% 20%;
+    --secondary-foreground: 200 80% 85%;
 
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
+    --muted: 250 20% 15%;
+    --muted-foreground: 240 10% 70%;
 
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 30 80% 60%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 350 70% 60%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 47 96% 53%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --border: 240 20% 20%;
+    --input: 240 20% 15%;
+    --ring: 320 70% 60%;
+
+    --sidebar-background: 240 20% 12%;
+    --sidebar-foreground: 0 0% 90%;
+    --sidebar-primary: 280 60% 65%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 240 20% 18%;
+    --sidebar-accent-foreground: 0 0% 85%;
+    --sidebar-border: 240 20% 20%;
+    --sidebar-ring: 280 60% 65%;
+
+    /* Dark Mode Clay Colors */
+    --clay-pink: 330 40% 25%;
+    --clay-blue: 200 40% 25%;
+    --clay-green: 150 30% 25%;
+    --clay-yellow: 50 50% 25%;
+    --clay-purple: 270 35% 25%;
+    --clay-orange: 30 50% 25%;
   }
 }
 
@@ -101,6 +119,192 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-gradient-to-br from-pink-50 via-blue-50 to-purple-50 text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  .dark body {
+    @apply bg-gradient-to-br from-slate-900 via-purple-900 to-indigo-900;
+  }
+}
+
+@layer components {
+  /* Claymorphism Button Styles */
+  .clay-button {
+    @apply rounded-2xl font-semibold transition-all duration-200;
+    box-shadow: 
+      inset 0 2px 4px rgba(255, 255, 255, 0.9),
+      0 8px 24px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .clay-button:hover {
+    @apply scale-105;
+    box-shadow: 
+      inset 0 2px 4px rgba(255, 255, 255, 0.9),
+      0 12px 32px rgba(0, 0, 0, 0.2);
+  }
+
+  .clay-button:active {
+    @apply scale-95;
+    box-shadow: 
+      inset 0 4px 8px rgba(0, 0, 0, 0.2),
+      0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Claymorphism Card Styles */
+  .clay-card {
+    @apply rounded-3xl;
+    box-shadow: 
+      inset 0 2px 4px rgba(255, 255, 255, 0.9),
+      0 8px 24px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.2));
+  }
+
+  /* Claymorphism Input Styles */
+  .clay-input {
+    @apply rounded-2xl px-6 py-4 border-none outline-none;
+    box-shadow: 
+      inset 0 4px 8px rgba(0, 0, 0, 0.1),
+      0 2px 4px rgba(255, 255, 255, 0.8);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.6));
+  }
+
+  .clay-input:focus {
+    box-shadow: 
+      inset 0 4px 8px rgba(0, 0, 0, 0.1),
+      0 0 0 3px rgba(168, 85, 247, 0.3),
+      0 2px 4px rgba(255, 255, 255, 0.8);
+  }
+
+  /* Color Variants */
+  .clay-pink {
+    background: linear-gradient(135deg, hsl(var(--clay-pink)), hsl(var(--clay-pink) / 0.7));
+  }
+
+  .clay-blue {
+    background: linear-gradient(135deg, hsl(var(--clay-blue)), hsl(var(--clay-blue) / 0.7));
+  }
+
+  .clay-green {
+    background: linear-gradient(135deg, hsl(var(--clay-green)), hsl(var(--clay-green) / 0.7));
+  }
+
+  .clay-yellow {
+    background: linear-gradient(135deg, hsl(var(--clay-yellow)), hsl(var(--clay-yellow) / 0.7));
+  }
+
+  .clay-purple {
+    background: linear-gradient(135deg, hsl(var(--clay-purple)), hsl(var(--clay-purple) / 0.7));
+  }
+
+  .clay-orange {
+    background: linear-gradient(135deg, hsl(var(--clay-orange)), hsl(var(--clay-orange) / 0.7));
+  }
+
+  /* Soft Shadows and Highlights */
+  .clay-shadow-sm {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .clay-shadow {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  }
+
+  .clay-shadow-lg {
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+  }
+
+  .clay-inset {
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.9);
+  }
+
+  .clay-outset {
+    box-shadow: 
+      inset 0 2px 4px rgba(255, 255, 255, 0.9),
+      0 8px 24px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Text Styles */
+  .clay-text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Accessibility */
+  .clay-focus-ring:focus {
+    outline: none;
+    box-shadow: 
+      0 0 0 3px rgba(168, 85, 247, 0.3),
+      inset 0 2px 4px rgba(255, 255, 255, 0.9),
+      0 8px 24px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* Smooth Animations for Claymorphism */
+@layer utilities {
+  .animate-clay-float {
+    animation: clay-float 3s ease-in-out infinite;
+  }
+
+  .animate-clay-pulse {
+    animation: clay-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .animate-clay-bounce {
+    animation: clay-bounce 1s infinite;
+  }
+}
+
+@keyframes clay-float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes clay-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes clay-bounce {
+  0%, 100% {
+    transform: translateY(-25%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+/* Smooth scrolling and better UX */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Better focus indicators */
+button:focus,
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+}
+
+/* Improved mobile touch targets */
+@media (pointer: coarse) {
+  button,
+  [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
   }
 }
