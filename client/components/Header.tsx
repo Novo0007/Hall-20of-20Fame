@@ -15,83 +15,92 @@ export const Header: React.FC<HeaderProps> = ({
   const { isDark, toggleTheme } = useTheme();
 
   return (
-    <header
-      className={`relative overflow-hidden ${
-        isDark
-          ? "bg-gradient-to-r from-gray-900 via-slate-900 to-gray-900"
-          : "bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900"
-      }`}
-    >
-      {/* Background pattern */}
-      <div
-        className={`absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%239C92AC\" fill-opacity=\"0.1\"%3E%3Ccircle cx=\"30\" cy=\"30\" r=\"2\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-20`}
-      ></div>
+    <header className="relative overflow-hidden bg-gradient-to-r from-pink-200 via-purple-200 to-blue-200">
+      {/* Claymorphism Background Pattern */}
+      <div className="absolute inset-0 opacity-20">
+        <div 
+          className="w-full h-full"
+          style={{
+            backgroundImage: `radial-gradient(circle at 25% 25%, rgba(255, 192, 203, 0.3) 0%, transparent 50%),
+                             radial-gradient(circle at 75% 75%, rgba(147, 197, 253, 0.3) 0%, transparent 50%),
+                             radial-gradient(circle at 50% 50%, rgba(196, 181, 253, 0.3) 0%, transparent 50%)`
+          }}
+        />
+      </div>
 
       <div className="relative px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-14 sm:h-16">
-          {/* Logo/Brand */}
-          <div className="flex items-center space-x-2 sm:space-x-3">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-lg flex items-center justify-center shadow-lg">
-              <span className="text-white text-lg sm:text-xl font-bold">
+        <div className="flex items-center justify-between h-16 sm:h-20">
+          {/* Logo/Brand with Claymorphism */}
+          <div className="flex items-center space-x-3 sm:space-x-4">
+            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center shadow-[inset_0_2px_4px_rgba(255,255,255,0.9),0_8px_24px_rgba(0,0,0,0.15)] bg-gradient-to-br from-yellow-300 to-orange-400 border border-yellow-200/50">
+              <span className="text-white text-xl sm:text-2xl font-bold drop-shadow-sm">
                 ⭕
               </span>
             </div>
             <div>
-              <h1 className="text-lg sm:text-xl font-bold text-white">
+              <h1 className="text-xl sm:text-2xl font-bold text-slate-800 clay-text-shadow">
                 Perfect Circle: Hall of Fame
               </h1>
-              <p className="text-purple-200 text-xs hidden sm:block">
+              <p className="text-purple-700 text-xs sm:text-sm font-medium hidden sm:block">
                 Master the Art of Precision
               </p>
             </div>
           </div>
 
-          {/* Navigation */}
-          <nav className="flex items-center space-x-2">
+          {/* Navigation with Claymorphism */}
+          <nav className="flex items-center space-x-2 sm:space-x-3">
             <button
               onClick={() => onNavigate("games")}
-              className={`px-2 sm:px-3 py-2 rounded-lg font-medium transition-all duration-200 text-sm ${
+              className={`px-3 sm:px-4 py-2 sm:py-3 rounded-xl font-semibold transition-all duration-200 text-sm shadow-[0_4px_12px_rgba(0,0,0,0.1)] border ${
                 currentView === "games" || currentView === "perfect_circle" || currentView === "balloon_pop"
-                  ? "bg-white text-slate-900 shadow-lg"
-                  : "text-white hover:bg-white/10"
+                  ? "bg-gradient-to-r from-white to-pink-50 text-slate-800 shadow-[inset_0_2px_4px_rgba(255,255,255,0.9),0_8px_24px_rgba(0,0,0,0.2)] border-white/50"
+                  : "bg-gradient-to-r from-white/70 to-purple-100/70 text-slate-700 hover:bg-gradient-to-r hover:from-white hover:to-pink-100 border-white/30"
               }`}
             >
               <span className="hidden sm:inline">🎯 Games</span>
-              <span className="sm:hidden">🎯</span>
+              <span className="sm:hidden text-lg">🎯</span>
             </button>
             <button
               onClick={() => onNavigate("leaderboard")}
-              className={`px-2 sm:px-3 py-2 rounded-lg font-medium transition-all duration-200 text-sm ${
+              className={`px-3 sm:px-4 py-2 sm:py-3 rounded-xl font-semibold transition-all duration-200 text-sm shadow-[0_4px_12px_rgba(0,0,0,0.1)] border ${
                 currentView === "leaderboard"
-                  ? "bg-white text-slate-900 shadow-lg"
-                  : "text-white hover:bg-white/10"
+                  ? "bg-gradient-to-r from-white to-yellow-50 text-slate-800 shadow-[inset_0_2px_4px_rgba(255,255,255,0.9),0_8px_24px_rgba(0,0,0,0.2)] border-white/50"
+                  : "bg-gradient-to-r from-white/70 to-purple-100/70 text-slate-700 hover:bg-gradient-to-r hover:from-white hover:to-yellow-100 border-white/30"
               }`}
             >
               <span className="hidden sm:inline">🏆 Hall of Fame</span>
-              <span className="sm:hidden">🏆</span>
+              <span className="sm:hidden text-lg">🏆</span>
             </button>
 
-            {/* Dark Mode Toggle */}
+            {/* Dark Mode Toggle with Claymorphism */}
             <button
               onClick={toggleTheme}
-              className="px-2 sm:px-3 py-2 rounded-lg font-medium transition-all duration-200 text-white hover:bg-white/10"
+              className="px-3 sm:px-4 py-2 sm:py-3 rounded-xl font-semibold transition-all duration-200 bg-gradient-to-r from-white/70 to-blue-100/70 text-slate-700 hover:bg-gradient-to-r hover:from-white hover:to-blue-100 shadow-[0_4px_12px_rgba(0,0,0,0.1)] border border-white/30"
               title={`Switch to ${isDark ? "light" : "dark"} mode`}
             >
               <span className="text-lg">{isDark ? "☀️" : "🌙"}</span>
             </button>
           </nav>
 
-          {/* User Stats */}
+          {/* User Stats with Claymorphism */}
           {userBestScore > 0 && (
-            <div className="hidden md:flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-lg px-3 py-2">
-              <span className="text-purple-200 text-sm">Personal Best:</span>
-              <span className="text-yellow-400 font-bold text-lg">
-                {userBestScore.toFixed(1)}%
-              </span>
+            <div className="hidden lg:flex items-center space-x-3 bg-gradient-to-r from-white/80 to-purple-100/80 backdrop-blur-sm rounded-2xl px-4 py-3 shadow-[inset_0_2px_4px_rgba(255,255,255,0.9),0_8px_24px_rgba(0,0,0,0.15)] border border-white/30">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-400 to-pink-500 flex items-center justify-center shadow-[0_4px_8px_rgba(0,0,0,0.1)]">
+                <span className="text-white text-sm font-bold">🎯</span>
+              </div>
+              <div>
+                <div className="text-purple-700 text-xs font-medium">Personal Best</div>
+                <div className="text-yellow-600 font-bold text-lg clay-text-shadow">
+                  {userBestScore.toFixed(1)}%
+                </div>
+              </div>
             </div>
           )}
         </div>
       </div>
+
+      {/* Bottom gradient border */}
+      <div className="h-1 bg-gradient-to-r from-pink-300 via-purple-300 to-blue-300 shadow-[0_2px_8px_rgba(0,0,0,0.1)]"></div>
     </header>
   );
 };
