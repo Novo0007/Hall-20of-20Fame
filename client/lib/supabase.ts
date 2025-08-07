@@ -197,8 +197,8 @@ export class Database {
             created_at: "2024-01-10T00:00:00Z",
             country_code: "IN",
             country_name: "India",
-            country_flag: "🇮🇳"
-          }
+            country_flag: "🇮🇳",
+          },
         },
         {
           id: "mock-2",
@@ -212,8 +212,8 @@ export class Database {
             created_at: "2024-01-09T00:00:00Z",
             country_code: "IN",
             country_name: "India",
-            country_flag: "🇮🇳"
-          }
+            country_flag: "🇮🇳",
+          },
         },
         {
           id: "mock-3",
@@ -227,8 +227,8 @@ export class Database {
             created_at: "2024-01-08T00:00:00Z",
             country_code: "IN",
             country_name: "India",
-            country_flag: "🇮🇳"
-          }
+            country_flag: "🇮🇳",
+          },
         },
         {
           id: "mock-4",
@@ -242,8 +242,8 @@ export class Database {
             created_at: "2024-01-07T00:00:00Z",
             country_code: "US",
             country_name: "United States",
-            country_flag: "🇺🇸"
-          }
+            country_flag: "🇺🇸",
+          },
         },
         {
           id: "mock-5",
@@ -257,8 +257,8 @@ export class Database {
             created_at: "2024-01-06T00:00:00Z",
             country_code: "BR",
             country_name: "Brazil",
-            country_flag: "🇧🇷"
-          }
+            country_flag: "🇧🇷",
+          },
         },
         {
           id: "mock-6",
@@ -272,8 +272,8 @@ export class Database {
             created_at: "2024-01-05T00:00:00Z",
             country_code: "JP",
             country_name: "Japan",
-            country_flag: "🇯🇵"
-          }
+            country_flag: "🇯🇵",
+          },
         },
         {
           id: "mock-7",
@@ -287,8 +287,8 @@ export class Database {
             created_at: "2024-01-04T00:00:00Z",
             country_code: "GB",
             country_name: "United Kingdom",
-            country_flag: "🇬🇧"
-          }
+            country_flag: "🇬🇧",
+          },
         },
         {
           id: "mock-8",
@@ -302,21 +302,19 @@ export class Database {
             created_at: "2024-01-03T00:00:00Z",
             country_code: "IN",
             country_name: "India",
-            country_flag: "🇮🇳"
-          }
-        }
+            country_flag: "🇮🇳",
+          },
+        },
       ];
 
       // Filter by game type if specified
       let filteredData = mockData;
       if (gameType && gameType !== "all") {
-        filteredData = mockData.filter(score => score.game_type === gameType);
+        filteredData = mockData.filter((score) => score.game_type === gameType);
       }
 
       // Sort by score and limit
-      return filteredData
-        .sort((a, b) => b.score - a.score)
-        .slice(0, limit);
+      return filteredData.sort((a, b) => b.score - a.score).slice(0, limit);
     }
 
     try {
