@@ -42,7 +42,9 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [userCountry, setUserCountryState] = useState<Country | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [userBestScore, setUserBestScore] = useState<number>(0);
-  const [userBestScores, setUserBestScores] = useState<{ [gameType: string]: number }>({});
+  const [userBestScores, setUserBestScores] = useState<{
+    [gameType: string]: number;
+  }>({});
 
   // Load user data from localStorage on mount
   useEffect(() => {
@@ -79,8 +81,14 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
       if (userData) {
         setUser(userData);
         // Load best scores for all games
-        const perfectCircleScore = await Database.getUserBestScore(userData.id, "perfect_circle");
-        const balloonPopScore = await Database.getUserBestScore(userData.id, "balloon_pop");
+        const perfectCircleScore = await Database.getUserBestScore(
+          userData.id,
+          "perfect_circle",
+        );
+        const balloonPopScore = await Database.getUserBestScore(
+          userData.id,
+          "balloon_pop",
+        );
 
         setUserBestScore(perfectCircleScore); // Keep for backward compatibility
         setUserBestScores({
@@ -136,15 +144,24 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
   const refreshUserBestScore = async () => {
     if (user) {
-      const bestScore = await Database.getUserBestScore(user.id, "perfect_circle");
+      const bestScore = await Database.getUserBestScore(
+        user.id,
+        "perfect_circle",
+      );
       setUserBestScore(bestScore);
     }
   };
 
   const refreshUserBestScores = async () => {
     if (user) {
-      const perfectCircleScore = await Database.getUserBestScore(user.id, "perfect_circle");
-      const balloonPopScore = await Database.getUserBestScore(user.id, "balloon_pop");
+      const perfectCircleScore = await Database.getUserBestScore(
+        user.id,
+        "perfect_circle",
+      );
+      const balloonPopScore = await Database.getUserBestScore(
+        user.id,
+        "balloon_pop",
+      );
 
       setUserBestScore(perfectCircleScore);
       setUserBestScores({

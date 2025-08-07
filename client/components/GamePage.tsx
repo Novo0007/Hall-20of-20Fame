@@ -67,9 +67,12 @@ const GameContent: React.FC = () => {
                     <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-300 to-purple-400 flex items-center justify-center mb-6 shadow-[0_8px_24px_rgba(0,0,0,0.15)] border border-blue-200/50 group-hover:animate-clay-float">
                       <span className="text-4xl">⭕</span>
                     </div>
-                    <h3 className="text-2xl sm:text-3xl font-bold mb-3 text-slate-800 clay-text-shadow">Perfect Circle</h3>
+                    <h3 className="text-2xl sm:text-3xl font-bold mb-3 text-slate-800 clay-text-shadow">
+                      Perfect Circle
+                    </h3>
                     <p className="text-slate-600 mb-6 text-base leading-relaxed">
-                      Draw the most perfect circle you can! Test your precision and steady hand.
+                      Draw the most perfect circle you can! Test your precision
+                      and steady hand.
                     </p>
                     <div className="px-6 py-3 bg-gradient-to-r from-blue-400 to-purple-500 text-white rounded-2xl text-sm font-bold shadow-[0_8px_24px_rgba(0,0,0,0.2)] border border-blue-300/30 group-hover:shadow-[0_12px_32px_rgba(0,0,0,0.25)] transition-all duration-200">
                       Play Now
@@ -89,9 +92,12 @@ const GameContent: React.FC = () => {
                     <div className="w-20 h-20 rounded-full bg-gradient-to-br from-red-300 to-pink-400 flex items-center justify-center mb-6 shadow-[0_8px_24px_rgba(0,0,0,0.15)] border border-red-200/50 group-hover:animate-clay-bounce">
                       <span className="text-4xl">🎈</span>
                     </div>
-                    <h3 className="text-2xl sm:text-3xl font-bold mb-3 text-slate-800 clay-text-shadow">Balloon Pop</h3>
+                    <h3 className="text-2xl sm:text-3xl font-bold mb-3 text-slate-800 clay-text-shadow">
+                      Balloon Pop
+                    </h3>
                     <p className="text-slate-600 mb-6 text-base leading-relaxed">
-                      Pop fast-falling balloons! Test your speed and reflexes in this exciting challenge.
+                      Pop fast-falling balloons! Test your speed and reflexes in
+                      this exciting challenge.
                     </p>
                     <div className="px-6 py-3 bg-gradient-to-r from-red-400 to-pink-500 text-white rounded-2xl text-sm font-bold shadow-[0_8px_24px_rgba(0,0,0,0.2)] border border-red-300/30 group-hover:shadow-[0_12px_32px_rgba(0,0,0,0.25)] transition-all duration-200">
                       Play Now

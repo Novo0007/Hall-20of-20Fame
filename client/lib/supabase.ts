@@ -128,7 +128,11 @@ export class Database {
   }
 
   // Submit a new score for a user (only if it's their best score)
-  static async submitScore(userId: string, score: number, gameType: string = "perfect_circle"): Promise<boolean> {
+  static async submitScore(
+    userId: string,
+    score: number,
+    gameType: string = "perfect_circle",
+  ): Promise<boolean> {
     if (!supabase) {
       console.warn("Supabase not configured - score not saved");
       return true; // Return true to not break the flow
@@ -173,7 +177,10 @@ export class Database {
   }
 
   // Get highest score for each user (leaderboard)
-  static async getLeaderboard(limit: number = 10, gameType?: string): Promise<Score[]> {
+  static async getLeaderboard(
+    limit: number = 10,
+    gameType?: string,
+  ): Promise<Score[]> {
     if (!supabase) {
       console.warn("Supabase not configured - returning empty leaderboard");
       return [];
@@ -236,7 +243,10 @@ export class Database {
   }
 
   // Get user's best score
-  static async getUserBestScore(userId: string, gameType: string = "perfect_circle"): Promise<number> {
+  static async getUserBestScore(
+    userId: string,
+    gameType: string = "perfect_circle",
+  ): Promise<number> {
     if (!supabase) {
       return 0;
     }

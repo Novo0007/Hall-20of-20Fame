@@ -316,7 +316,10 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameFilter }) => {
                         <div
                           className={`text-2xl sm:text-4xl font-bold mb-2 clay-text-shadow ${getScoreColor(score.score, score.game_type)}`}
                         >
-                          {score.game_type === "balloon_pop" ? Math.floor(score.score) : score.score.toFixed(1)}{getScoreUnit(score.game_type)}
+                          {score.game_type === "balloon_pop"
+                            ? Math.floor(score.score)
+                            : score.score.toFixed(1)}
+                          {getScoreUnit(score.game_type)}
                         </div>
                         <div className="text-slate-500 text-sm sm:text-base font-semibold">
                           {score.game_type === "balloon_pop"
@@ -352,9 +355,13 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameFilter }) => {
                 <span className="font-semibold">Live rankings</span>
               </span>
               <span className="hidden sm:inline">•</span>
-              <span className="font-medium">Best score per player per game</span>
+              <span className="font-medium">
+                Best score per player per game
+              </span>
             </div>
-            <div className="text-slate-500 font-medium">Updated in real-time</div>
+            <div className="text-slate-500 font-medium">
+              Updated in real-time
+            </div>
           </div>
         </div>
       </div>

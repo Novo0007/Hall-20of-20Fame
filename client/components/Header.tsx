@@ -3,7 +3,9 @@ import { useTheme } from "../contexts/ThemeContext";
 
 interface HeaderProps {
   currentView: "games" | "perfect_circle" | "balloon_pop" | "leaderboard";
-  onNavigate: (view: "games" | "perfect_circle" | "balloon_pop" | "leaderboard") => void;
+  onNavigate: (
+    view: "games" | "perfect_circle" | "balloon_pop" | "leaderboard",
+  ) => void;
   userBestScore: number;
 }
 
@@ -18,12 +20,12 @@ export const Header: React.FC<HeaderProps> = ({
     <header className="relative overflow-hidden bg-gradient-to-r from-pink-200 via-purple-200 to-blue-200">
       {/* Claymorphism Background Pattern */}
       <div className="absolute inset-0 opacity-20">
-        <div 
+        <div
           className="w-full h-full"
           style={{
             backgroundImage: `radial-gradient(circle at 25% 25%, rgba(255, 192, 203, 0.3) 0%, transparent 50%),
                              radial-gradient(circle at 75% 75%, rgba(147, 197, 253, 0.3) 0%, transparent 50%),
-                             radial-gradient(circle at 50% 50%, rgba(196, 181, 253, 0.3) 0%, transparent 50%)`
+                             radial-gradient(circle at 50% 50%, rgba(196, 181, 253, 0.3) 0%, transparent 50%)`,
           }}
         />
       </div>
@@ -52,7 +54,9 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               onClick={() => onNavigate("games")}
               className={`px-3 sm:px-4 py-2 sm:py-3 rounded-xl font-semibold transition-all duration-200 text-sm shadow-[0_4px_12px_rgba(0,0,0,0.1)] border ${
-                currentView === "games" || currentView === "perfect_circle" || currentView === "balloon_pop"
+                currentView === "games" ||
+                currentView === "perfect_circle" ||
+                currentView === "balloon_pop"
                   ? "bg-gradient-to-r from-white to-pink-50 text-slate-800 shadow-[inset_0_2px_4px_rgba(255,255,255,0.9),0_8px_24px_rgba(0,0,0,0.2)] border-white/50"
                   : "bg-gradient-to-r from-white/70 to-purple-100/70 text-slate-700 hover:bg-gradient-to-r hover:from-white hover:to-pink-100 border-white/30"
               }`}
@@ -89,7 +93,9 @@ export const Header: React.FC<HeaderProps> = ({
                 <span className="text-white text-sm font-bold">🎯</span>
               </div>
               <div>
-                <div className="text-purple-700 text-xs font-medium">Personal Best</div>
+                <div className="text-purple-700 text-xs font-medium">
+                  Personal Best
+                </div>
                 <div className="text-yellow-600 font-bold text-lg clay-text-shadow">
                   {userBestScore.toFixed(1)}%
                 </div>

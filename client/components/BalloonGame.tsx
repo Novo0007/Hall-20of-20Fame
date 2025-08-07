@@ -20,10 +20,14 @@ interface BalloonGameProps {
 
 const BALLOON_EMOJI_COLORS = ["🔴", "🔵", "🟢", "🟡", "🟣", "🟠"];
 
-export const BalloonGame: React.FC<BalloonGameProps> = ({ onShowLeaderboard }) => {
+export const BalloonGame: React.FC<BalloonGameProps> = ({
+  onShowLeaderboard,
+}) => {
   const [balloons, setBalloons] = useState<Balloon[]>([]);
   const [score, setScore] = useState(0);
-  const [gameState, setGameState] = useState<"waiting" | "playing" | "paused">("waiting");
+  const [gameState, setGameState] = useState<"waiting" | "playing" | "paused">(
+    "waiting",
+  );
   const [gameArea, setGameArea] = useState({ width: 0, height: 0 });
   const [showScoreSubmitted, setShowScoreSubmitted] = useState(false);
   const [personalBest, setPersonalBest] = useState(0);
@@ -63,7 +67,7 @@ export const BalloonGame: React.FC<BalloonGameProps> = ({ onShowLeaderboard }) =
     const x = 50 + Math.random() * (gameArea.width - 100);
     const y = -50;
     // Professional speed scaling: starts moderate, increases with score
-    const baseSpeed = 2.5 + (score * 0.1); // Speed increases with score
+    const baseSpeed = 2.5 + score * 0.1; // Speed increases with score
     const speedY = baseSpeed + Math.random() * 2;
 
     totalBalloonsRef.current += 1;
@@ -72,7 +76,10 @@ export const BalloonGame: React.FC<BalloonGameProps> = ({ onShowLeaderboard }) =
       id: balloonIdCounter.current++,
       x,
       y,
-      color: BALLOON_EMOJI_COLORS[Math.floor(Math.random() * BALLOON_EMOJI_COLORS.length)],
+      color:
+        BALLOON_EMOJI_COLORS[
+          Math.floor(Math.random() * BALLOON_EMOJI_COLORS.length)
+        ],
       size: 35 + Math.random() * 15,
       speedY: Math.min(speedY, 8), // Cap max speed for fairness
       isPopping: false,
@@ -84,48 +91,57 @@ export const BalloonGame: React.FC<BalloonGameProps> = ({ onShowLeaderboard }) =
   const startBalloonSpawning = useCallback(() => {
     const spawnInterval = () => {
       if (gameState === "playing") {
-        setBalloons(prev => [...prev, createBalloon()]);
-        
+        setBalloons((prev) => [...prev, createBalloon()]);
+
         // Professional spawning: faster as score increases
         const baseInterval = 1500; // 1.5 seconds base
         const speedIncrease = Math.max(0, score * 50); // Decrease by 50ms per point
-        const nextSpawnTime = Math.max(500, baseInterval - speedIncrease) + (Math.random() * 500);
-        
+        const nextSpawnTime =
+          Math.max(500, baseInterval - speedIncrease) + Math.random() * 500;
+
         spawnTimerRef.current = setTimeout(spawnInterval, nextSpawnTime);
       }
     };
-    
+
     spawnInterval();
   }, [gameState, createBalloon, score]);
 
   // Game animation loop - Professional: smooth and consistent
   const animate = useCallback(() => {
-    setBalloons(prevBalloons => {
+    setBalloons((prevBalloons) => {
       return prevBalloons
-        .map(balloon => {
+        .map((balloon) => {
           const newBalloon = {
             ...balloon,
             y: balloon.y + balloon.speedY,
           };
-          
+
           // Track missed balloons for analytics (no penalty)
-          if (newBalloon.y > gameArea.height + 50 && !newBalloon.isPopping && !newBalloon.isMissed) {
+          if (
+            newBalloon.y > gameArea.height + 50 &&
+            !newBalloon.isPopping &&
+            !newBalloon.isMissed
+          ) {
             newBalloon.isMissed = true;
-            setMissedBalloons(prev => prev + 1);
-            
+            setMissedBalloons((prev) => prev + 1);
+
             // Update accuracy calculation
             const newMissed = missedBalloons + 1;
-            const newAccuracy = totalBalloonsRef.current > 0 
-              ? Math.round(((totalBalloonsRef.current - newMissed) / totalBalloonsRef.current) * 100)
-              : 100;
+            const newAccuracy =
+              totalBalloonsRef.current > 0
+                ? Math.round(
+                    ((totalBalloonsRef.current - newMissed) /
+                      totalBalloonsRef.current) *
+                      100,
+                  )
+                : 100;
             setAccuracy(newAccuracy);
           }
-          
+
           return newBalloon;
         })
-        .filter(balloon => 
-          balloon.y < gameArea.height + 100 && 
-          !balloon.isPopping
+        .filter(
+          (balloon) => balloon.y < gameArea.height + 100 && !balloon.isPopping,
         );
     });
 
@@ -147,11 +163,11 @@ export const BalloonGame: React.FC<BalloonGameProps> = ({ onShowLeaderboard }) =
 
   const endGame = async () => {
     setGameState("paused");
-    
+
     if (spawnTimerRef.current) {
       clearTimeout(spawnTimerRef.current);
     }
-    
+
     if (user && score > 0) {
       const success = await Database.submitScore(user.id, score, "balloon_pop");
       if (success) {
@@ -164,23 +180,22 @@ export const BalloonGame: React.FC<BalloonGameProps> = ({ onShowLeaderboard }) =
   };
 
   const popBalloon = (balloonId: number) => {
-    setBalloons(prev => 
-      prev.map(balloon => 
-        balloon.id === balloonId 
-          ? { ...balloon, isPopping: true }
-          : balloon
-      )
+    setBalloons((prev) =>
+      prev.map((balloon) =>
+        balloon.id === balloonId ? { ...balloon, isPopping: true } : balloon,
+      ),
     );
-    setScore(prev => prev + 1);
-    
+    setScore((prev) => prev + 1);
+
     // Update accuracy on successful pop
-    const newAccuracy = totalBalloonsRef.current > 0 
-      ? Math.round(((score + 1) / totalBalloonsRef.current) * 100)
-      : 100;
+    const newAccuracy =
+      totalBalloonsRef.current > 0
+        ? Math.round(((score + 1) / totalBalloonsRef.current) * 100)
+        : 100;
     setAccuracy(newAccuracy);
-    
+
     setTimeout(() => {
-      setBalloons(prev => prev.filter(balloon => balloon.id !== balloonId));
+      setBalloons((prev) => prev.filter((balloon) => balloon.id !== balloonId));
     }, 200);
   };
 
@@ -192,7 +207,7 @@ export const BalloonGame: React.FC<BalloonGameProps> = ({ onShowLeaderboard }) =
         clearTimeout(spawnTimerRef.current);
       }
     }
-    
+
     return () => {
       if (spawnTimerRef.current) {
         clearTimeout(spawnTimerRef.current);
@@ -225,7 +240,8 @@ export const BalloonGame: React.FC<BalloonGameProps> = ({ onShowLeaderboard }) =
           🎈 Balloon Pop
         </h1>
         <p className="text-lg sm:text-xl text-slate-600 font-medium">
-          Professional balloon popping challenge! Speed increases with your score.
+          Professional balloon popping challenge! Speed increases with your
+          score.
         </p>
       </div>
 
@@ -233,7 +249,9 @@ export const BalloonGame: React.FC<BalloonGameProps> = ({ onShowLeaderboard }) =
       <div className="flex justify-center flex-wrap gap-4 mb-8">
         <div className="relative px-6 py-4 rounded-3xl bg-gradient-to-br from-red-200 to-pink-200 shadow-[inset_0_2px_4px_rgba(255,255,255,0.9),0_8px_24px_rgba(0,0,0,0.15)] border border-red-300/30">
           <div className="text-center">
-            <div className="text-3xl sm:text-4xl font-bold text-red-600 mb-1 drop-shadow-sm">{score}</div>
+            <div className="text-3xl sm:text-4xl font-bold text-red-600 mb-1 drop-shadow-sm">
+              {score}
+            </div>
             <div className="text-xs font-semibold text-red-800/80">Score</div>
           </div>
           {score > personalBest && score > 0 && (
@@ -242,19 +260,27 @@ export const BalloonGame: React.FC<BalloonGameProps> = ({ onShowLeaderboard }) =
             </div>
           )}
         </div>
-        
+
         <div className="px-6 py-4 rounded-3xl bg-gradient-to-br from-blue-200 to-indigo-200 shadow-[inset_0_2px_4px_rgba(255,255,255,0.9),0_8px_24px_rgba(0,0,0,0.15)] border border-blue-300/30">
           <div className="text-center">
-            <div className="text-3xl sm:text-4xl font-bold text-blue-600 mb-1 drop-shadow-sm">{accuracy}%</div>
-            <div className="text-xs font-semibold text-blue-800/80">Accuracy</div>
+            <div className="text-3xl sm:text-4xl font-bold text-blue-600 mb-1 drop-shadow-sm">
+              {accuracy}%
+            </div>
+            <div className="text-xs font-semibold text-blue-800/80">
+              Accuracy
+            </div>
           </div>
         </div>
-        
+
         {personalBest > 0 && (
           <div className="px-6 py-4 rounded-3xl bg-gradient-to-br from-purple-200 to-violet-200 shadow-[inset_0_2px_4px_rgba(255,255,255,0.9),0_8px_24px_rgba(0,0,0,0.15)] border border-purple-300/30">
             <div className="text-center">
-              <div className="text-3xl sm:text-4xl font-bold text-purple-600 mb-1 drop-shadow-sm">{personalBest}</div>
-              <div className="text-xs font-semibold text-purple-800/80">Personal Best</div>
+              <div className="text-3xl sm:text-4xl font-bold text-purple-600 mb-1 drop-shadow-sm">
+                {personalBest}
+              </div>
+              <div className="text-xs font-semibold text-purple-800/80">
+                Personal Best
+              </div>
             </div>
           </div>
         )}
@@ -278,15 +304,18 @@ export const BalloonGame: React.FC<BalloonGameProps> = ({ onShowLeaderboard }) =
               width: balloon.size,
               height: balloon.size,
               fontSize: balloon.size * 0.8,
-              background: 'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), rgba(255,255,255,0.1))',
-              border: '1px solid rgba(255,255,255,0.3)',
+              background:
+                "radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), rgba(255,255,255,0.1))",
+              border: "1px solid rgba(255,255,255,0.3)",
             }}
             onClick={() => popBalloon(balloon.id)}
             onTouchStart={(e) => {
               e.preventDefault();
               popBalloon(balloon.id);
             }}
-            disabled={balloon.isPopping || balloon.isMissed || gameState !== "playing"}
+            disabled={
+              balloon.isPopping || balloon.isMissed || gameState !== "playing"
+            }
           >
             {balloon.color}
           </button>
@@ -297,8 +326,12 @@ export const BalloonGame: React.FC<BalloonGameProps> = ({ onShowLeaderboard }) =
           <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-white/80 to-blue-100/80 backdrop-blur-sm">
             <div className="text-center bg-gradient-to-br from-white to-pink-50 rounded-[2rem] p-10 mx-4 shadow-[0_16px_40px_rgba(0,0,0,0.15)] border border-white/50 max-w-sm">
               <div className="text-7xl mb-6 drop-shadow-lg">🎈</div>
-              <h3 className="text-3xl font-bold text-slate-800 mb-3">Ready to Pop?</h3>
-              <p className="text-slate-600 mb-8 text-lg">Professional challenge! Speed increases as you score!</p>
+              <h3 className="text-3xl font-bold text-slate-800 mb-3">
+                Ready to Pop?
+              </h3>
+              <p className="text-slate-600 mb-8 text-lg">
+                Professional challenge! Speed increases as you score!
+              </p>
               <button
                 onClick={startGame}
                 className="w-full px-8 py-5 bg-gradient-to-r from-red-400 to-pink-500 text-white rounded-2xl font-bold text-xl hover:from-red-500 hover:to-pink-600 transition-all duration-200 shadow-[0_8px_24px_rgba(0,0,0,0.2)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.25)] border border-red-300/30"
@@ -313,14 +346,24 @@ export const BalloonGame: React.FC<BalloonGameProps> = ({ onShowLeaderboard }) =
           <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-white/80 to-purple-100/80 backdrop-blur-sm">
             <div className="text-center bg-gradient-to-br from-white to-purple-50 rounded-[2rem] p-10 mx-4 shadow-[0_16px_40px_rgba(0,0,0,0.15)] border border-white/50 max-w-sm">
               <div className="text-7xl mb-6 drop-shadow-lg">🏆</div>
-              <h3 className="text-3xl font-bold text-slate-800 mb-3">Game Finished!</h3>
-              <p className="text-5xl font-bold text-red-500 mb-2 drop-shadow-sm">{score}</p>
-              <p className="text-lg font-semibold text-blue-600 mb-4">Accuracy: {accuracy}%</p>
+              <h3 className="text-3xl font-bold text-slate-800 mb-3">
+                Game Finished!
+              </h3>
+              <p className="text-5xl font-bold text-red-500 mb-2 drop-shadow-sm">
+                {score}
+              </p>
+              <p className="text-lg font-semibold text-blue-600 mb-4">
+                Accuracy: {accuracy}%
+              </p>
               {score > personalBest && score > 0 && (
-                <p className="text-orange-600 font-bold mb-6 text-lg">🎉 New Personal Best!</p>
+                <p className="text-orange-600 font-bold mb-6 text-lg">
+                  🎉 New Personal Best!
+                </p>
               )}
               {showScoreSubmitted && (
-                <p className="text-green-600 text-sm mb-6 font-semibold">✅ Score saved to Hall of Fame!</p>
+                <p className="text-green-600 text-sm mb-6 font-semibold">
+                  ✅ Score saved to Hall of Fame!
+                </p>
               )}
               <div className="space-y-4">
                 <button
@@ -363,21 +406,29 @@ export const BalloonGame: React.FC<BalloonGameProps> = ({ onShowLeaderboard }) =
           <div className="space-y-3">
             <div className="flex items-center space-x-3">
               <span className="text-green-500 text-xl">✓</span>
-              <span className="font-medium text-green-800">Balloons fall from the top with increasing speed</span>
+              <span className="font-medium text-green-800">
+                Balloons fall from the top with increasing speed
+              </span>
             </div>
             <div className="flex items-center space-x-3">
               <span className="text-green-500 text-xl">✓</span>
-              <span className="font-medium text-green-800">Tap/click balloons to pop them</span>
+              <span className="font-medium text-green-800">
+                Tap/click balloons to pop them
+              </span>
             </div>
           </div>
           <div className="space-y-3">
             <div className="flex items-center space-x-3">
               <span className="text-green-500 text-xl">✓</span>
-              <span className="font-medium text-green-800">Each popped balloon = +1 point</span>
+              <span className="font-medium text-green-800">
+                Each popped balloon = +1 point
+              </span>
             </div>
             <div className="flex items-center space-x-3">
               <span className="text-blue-500 text-xl">📊</span>
-              <span className="font-medium text-blue-800">Track your accuracy percentage</span>
+              <span className="font-medium text-blue-800">
+                Track your accuracy percentage
+              </span>
             </div>
           </div>
         </div>
