@@ -190,7 +190,7 @@ const GameContent: React.FC = () => {
               <span className="text-slate-600">By</span>
               <span className="text-purple-600 font-bold">NNC</span>
               <span className="text-slate-600">With Love</span>
-              <span className="text-red-500 text-base animate-pulse">💖</span>
+              <span className="text-red-500 text-base animate-pulse">💖😘</span>
             </div>
           </div>
         </div>
