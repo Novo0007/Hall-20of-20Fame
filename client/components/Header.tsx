@@ -2,8 +2,8 @@ import React from "react";
 import { useTheme } from "../contexts/ThemeContext";
 
 interface HeaderProps {
-  currentView: "game" | "leaderboard";
-  onNavigate: (view: "game" | "leaderboard") => void;
+  currentView: "games" | "perfect_circle" | "balloon_pop" | "leaderboard";
+  onNavigate: (view: "games" | "perfect_circle" | "balloon_pop" | "leaderboard") => void;
   userBestScore: number;
 }
 
@@ -49,14 +49,14 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Navigation */}
           <nav className="flex items-center space-x-2">
             <button
-              onClick={() => onNavigate("game")}
+              onClick={() => onNavigate("games")}
               className={`px-2 sm:px-3 py-2 rounded-lg font-medium transition-all duration-200 text-sm ${
-                currentView === "game"
+                currentView === "games" || currentView === "perfect_circle" || currentView === "balloon_pop"
                   ? "bg-white text-slate-900 shadow-lg"
                   : "text-white hover:bg-white/10"
               }`}
             >
-              <span className="hidden sm:inline">🎯 Game</span>
+              <span className="hidden sm:inline">🎯 Games</span>
               <span className="sm:hidden">🎯</span>
             </button>
             <button
@@ -67,7 +67,7 @@ export const Header: React.FC<HeaderProps> = ({
                   : "text-white hover:bg-white/10"
               }`}
             >
-              <span className="hidden sm:inline">🏆 Leaderboard</span>
+              <span className="hidden sm:inline">🏆 Hall of Fame</span>
               <span className="sm:hidden">🏆</span>
             </button>
 
