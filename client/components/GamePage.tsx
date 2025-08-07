@@ -65,7 +65,7 @@ const GameContent: React.FC = () => {
                 <div className="relative h-80 p-8 bg-gradient-to-br from-white/80 to-blue-50/80 backdrop-blur-sm border border-white/50 rounded-[2rem] shadow-[inset_0_2px_4px_rgba(255,255,255,0.9)]">
                   <div className="flex flex-col items-center justify-center h-full text-center">
                     <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-300 to-purple-400 flex items-center justify-center mb-6 shadow-[0_8px_24px_rgba(0,0,0,0.15)] border border-blue-200/50 group-hover:animate-clay-float">
-                      <span className="text-4xl">⭕</span>
+                      <span className="text-4xl">⭕ </span>
                     </div>
                     <h3 className="text-2xl sm:text-3xl font-bold mb-3 text-slate-800 clay-text-shadow">
                       Perfect Circle
@@ -190,7 +190,7 @@ const GameContent: React.FC = () => {
               <span className="text-slate-600">By</span>
               <span className="text-purple-600 font-bold">NNC</span>
               <span className="text-slate-600">With Love</span>
-              <span className="text-red-500 text-base animate-pulse">💖</span>
+              <span className="text-red-500 text-base animate-pulse">💖😘</span>
             </div>
           </div>
         </div>
