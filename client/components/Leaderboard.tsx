@@ -3,20 +3,26 @@ import { Database, Score } from "../lib/supabase";
 import { useUser } from "../contexts/UserContext";
 import { useTheme } from "../contexts/ThemeContext";
 
-export const Leaderboard: React.FC = () => {
+interface LeaderboardProps {
+  gameFilter?: string;
+}
+
+export const Leaderboard: React.FC<LeaderboardProps> = ({ gameFilter }) => {
   const [scores, setScores] = useState<Score[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedGame, setSelectedGame] = useState<string>(gameFilter || "all");
   const { user } = useUser();
   const { isDark } = useTheme();
 
   useEffect(() => {
     loadLeaderboard();
-  }, []);
+  }, [selectedGame]);
 
   const loadLeaderboard = async () => {
     setIsLoading(true);
     try {
-      const leaderboard = await Database.getLeaderboard(10);
+      const gameType = selectedGame === "all" ? undefined : selectedGame;
+      const leaderboard = await Database.getLeaderboard(10, gameType);
       setScores(leaderboard);
     } catch (error) {
       console.error("Error loading leaderboard:", error);
@@ -38,11 +44,51 @@ export const Leaderboard: React.FC = () => {
     }
   };
 
-  const getScoreColor = (score: number): string => {
-    if (score >= 90) return "text-green-400";
-    if (score >= 70) return "text-yellow-400";
-    if (score >= 50) return "text-orange-400";
-    return "text-red-400";
+  const getScoreColor = (score: number, gameType: string): string => {
+    if (gameType === "balloon_pop") {
+      if (score >= 50) return "text-green-400";
+      if (score >= 30) return "text-yellow-400";
+      if (score >= 15) return "text-orange-400";
+      return "text-red-400";
+    } else {
+      if (score >= 90) return "text-green-400";
+      if (score >= 70) return "text-yellow-400";
+      if (score >= 50) return "text-orange-400";
+      return "text-red-400";
+    }
+  };
+
+  const getGameDisplayName = (gameType: string): string => {
+    switch (gameType) {
+      case "perfect_circle":
+        return "Perfect Circle";
+      case "balloon_pop":
+        return "Balloon Pop";
+      default:
+        return gameType;
+    }
+  };
+
+  const getGameEmoji = (gameType: string): string => {
+    switch (gameType) {
+      case "perfect_circle":
+        return "⭕";
+      case "balloon_pop":
+        return "🎈";
+      default:
+        return "🎯";
+    }
+  };
+
+  const getScoreUnit = (gameType: string): string => {
+    switch (gameType) {
+      case "perfect_circle":
+        return "%";
+      case "balloon_pop":
+        return " balloons";
+      default:
+        return "";
+    }
   };
 
   return (
@@ -64,12 +110,12 @@ export const Leaderboard: React.FC = () => {
           </span>
         </div>
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text text-transparent mb-2">
-          🏆 Leaderboard
+          🏆 Hall of Fame
         </h1>
         <p
           className={`text-sm sm:text-base ${isDark ? "text-slate-400" : "text-slate-600"}`}
         >
-          Top 10 Perfect Circle Masters
+          Top 10 Champions Across All Games
         </p>
       </div>
 
@@ -89,7 +135,7 @@ export const Leaderboard: React.FC = () => {
                   Hall of Fame
                 </h2>
                 <p className="text-orange-100 text-xs sm:text-sm">
-                  Top scoring players
+                  Top scoring champions
                 </p>
               </div>
             </div>
@@ -109,6 +155,42 @@ export const Leaderboard: React.FC = () => {
                   <span className="hidden sm:inline">Refresh</span>
                 </span>
               )}
+            </button>
+          </div>
+        </div>
+
+        {/* Game Filter */}
+        <div className="px-6 py-4 border-b border-orange-200">
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => setSelectedGame("all")}
+              className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
+                selectedGame === "all"
+                  ? "bg-white text-orange-600 shadow-sm"
+                  : "bg-white/20 text-white hover:bg-white/30"
+              }`}
+            >
+              🏆 All Games
+            </button>
+            <button
+              onClick={() => setSelectedGame("perfect_circle")}
+              className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
+                selectedGame === "perfect_circle"
+                  ? "bg-white text-orange-600 shadow-sm"
+                  : "bg-white/20 text-white hover:bg-white/30"
+              }`}
+            >
+              ⭕ Perfect Circle
+            </button>
+            <button
+              onClick={() => setSelectedGame("balloon_pop")}
+              className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
+                selectedGame === "balloon_pop"
+                  ? "bg-white text-orange-600 shadow-sm"
+                  : "bg-white/20 text-white hover:bg-white/30"
+              }`}
+            >
+              🎈 Balloon Pop
             </button>
           </div>
         </div>
@@ -215,6 +297,12 @@ export const Leaderboard: React.FC = () => {
                               </span>
                             )}
                           </div>
+                          <div className="flex items-center space-x-2">
+                            <span className="inline-flex items-center space-x-1 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-2 py-0.5 rounded-full text-xs font-medium">
+                              <span>{getGameEmoji(score.game_type)}</span>
+                              <span>{getGameDisplayName(score.game_type)}</span>
+                            </span>
+                          </div>
                           {isPodium && (
                             <span className="inline-flex items-center space-x-1 bg-yellow-500 text-white px-2 py-0.5 rounded-full text-xs font-medium">
                               <span>🏆</span>
@@ -235,18 +323,26 @@ export const Leaderboard: React.FC = () => {
 
                       <div className="text-right shrink-0">
                         <div
-                          className={`text-xl sm:text-3xl font-bold mb-1 ${getScoreColor(score.score)}`}
+                          className={`text-xl sm:text-3xl font-bold mb-1 ${getScoreColor(score.score, score.game_type)}`}
                         >
-                          {score.score.toFixed(1)}%
+                          {score.game_type === "balloon_pop" ? Math.floor(score.score) : score.score.toFixed(1)}{getScoreUnit(score.game_type)}
                         </div>
                         <div className="text-slate-500 text-xs sm:text-sm">
-                          {score.score >= 90
-                            ? "Perfect"
-                            : score.score >= 70
-                              ? "Great"
-                              : score.score >= 50
-                                ? "Good"
-                                : "Fair"}
+                          {score.game_type === "balloon_pop"
+                            ? score.score >= 50
+                              ? "Amazing"
+                              : score.score >= 30
+                                ? "Great"
+                                : score.score >= 15
+                                  ? "Good"
+                                  : "Try Again"
+                            : score.score >= 90
+                              ? "Perfect"
+                              : score.score >= 70
+                                ? "Great"
+                                : score.score >= 50
+                                  ? "Good"
+                                  : "Fair"}
                         </div>
                       </div>
                     </div>
@@ -265,7 +361,7 @@ export const Leaderboard: React.FC = () => {
                 <span>Live rankings</span>
               </span>
               <span className="hidden sm:inline">•</span>
-              <span>Best score per player</span>
+              <span>Best score per player per game</span>
             </div>
             <div className="text-slate-500">Updated in real-time</div>
           </div>
