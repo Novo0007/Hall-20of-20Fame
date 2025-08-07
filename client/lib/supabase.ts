@@ -182,8 +182,141 @@ export class Database {
     gameType?: string,
   ): Promise<Score[]> {
     if (!supabase) {
-      console.warn("Supabase not configured - returning empty leaderboard");
-      return [];
+      console.warn("Supabase not configured - returning mock leaderboard data");
+      // Return mock data for demonstration
+      const mockData: Score[] = [
+        {
+          id: "mock-1",
+          user_id: "mock-user-vivo",
+          score: 79.5,
+          game_type: "perfect_circle",
+          created_at: "2024-01-15T10:30:00Z",
+          user: {
+            id: "mock-user-vivo",
+            name: "vivo",
+            created_at: "2024-01-10T00:00:00Z",
+            country_code: "IN",
+            country_name: "India",
+            country_flag: "🇮🇳"
+          }
+        },
+        {
+          id: "mock-2",
+          user_id: "mock-user-momo",
+          score: 63.6,
+          game_type: "perfect_circle",
+          created_at: "2024-01-14T15:20:00Z",
+          user: {
+            id: "mock-user-momo",
+            name: "momo",
+            created_at: "2024-01-09T00:00:00Z",
+            country_code: "IN",
+            country_name: "India",
+            country_flag: "🇮🇳"
+          }
+        },
+        {
+          id: "mock-3",
+          user_id: "mock-user-milo",
+          score: 58.5,
+          game_type: "perfect_circle",
+          created_at: "2024-01-13T09:45:00Z",
+          user: {
+            id: "mock-user-milo",
+            name: "milo",
+            created_at: "2024-01-08T00:00:00Z",
+            country_code: "IN",
+            country_name: "India",
+            country_flag: "🇮🇳"
+          }
+        },
+        {
+          id: "mock-4",
+          user_id: "mock-user-alex",
+          score: 52.8,
+          game_type: "balloon_pop",
+          created_at: "2024-01-12T14:15:00Z",
+          user: {
+            id: "mock-user-alex",
+            name: "Alex",
+            created_at: "2024-01-07T00:00:00Z",
+            country_code: "US",
+            country_name: "United States",
+            country_flag: "🇺🇸"
+          }
+        },
+        {
+          id: "mock-5",
+          user_id: "mock-user-maria",
+          score: 47.2,
+          game_type: "balloon_pop",
+          created_at: "2024-01-11T11:30:00Z",
+          user: {
+            id: "mock-user-maria",
+            name: "Maria",
+            created_at: "2024-01-06T00:00:00Z",
+            country_code: "BR",
+            country_name: "Brazil",
+            country_flag: "🇧🇷"
+          }
+        },
+        {
+          id: "mock-6",
+          user_id: "mock-user-kenji",
+          score: 44.7,
+          game_type: "perfect_circle",
+          created_at: "2024-01-10T16:45:00Z",
+          user: {
+            id: "mock-user-kenji",
+            name: "Kenji",
+            created_at: "2024-01-05T00:00:00Z",
+            country_code: "JP",
+            country_name: "Japan",
+            country_flag: "🇯🇵"
+          }
+        },
+        {
+          id: "mock-7",
+          user_id: "mock-user-emma",
+          score: 41.3,
+          game_type: "balloon_pop",
+          created_at: "2024-01-09T13:20:00Z",
+          user: {
+            id: "mock-user-emma",
+            name: "Emma",
+            created_at: "2024-01-04T00:00:00Z",
+            country_code: "GB",
+            country_name: "United Kingdom",
+            country_flag: "🇬🇧"
+          }
+        },
+        {
+          id: "mock-8",
+          user_id: "mock-user-raj",
+          score: 38.9,
+          game_type: "perfect_circle",
+          created_at: "2024-01-08T08:15:00Z",
+          user: {
+            id: "mock-user-raj",
+            name: "Raj",
+            created_at: "2024-01-03T00:00:00Z",
+            country_code: "IN",
+            country_name: "India",
+            country_flag: "🇮🇳"
+          }
+        }
+      ];
+
+      // Filter by game type if specified
+      let filteredData = mockData;
+      if (gameType && gameType !== "all") {
+        filteredData = mockData.filter(score => score.game_type === gameType);
+      }
+
+      // Sort by score and limit
+      return filteredData
+        .sort((a, b) => b.score - a.score)
+        .slice(0, limit);
     }
 
     try {
