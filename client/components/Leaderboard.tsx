@@ -108,10 +108,10 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameFilter }) => {
             Global Competition
           </span>
         </div>
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 bg-clip-text text-transparent mb-4 clay-text-shadow">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 bg-clip-text text-transparent mb-4 clay-text-shadow">
           🏆 Hall of Fame
         </h1>
-        <p className="text-lg sm:text-xl text-slate-600 font-medium">
+        <p className="text-base sm:text-lg text-slate-600 font-medium">
           Top 10 Champions Across All Games
         </p>
       </div>
@@ -124,7 +124,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameFilter }) => {
                 <span className="text-white text-2xl sm:text-3xl">👑</span>
               </div>
               <div>
-                <h2 className="text-2xl sm:text-3xl font-bold text-white clay-text-shadow">
+                <h2 className="text-xl sm:text-2xl font-bold text-white clay-text-shadow">
                   Hall of Fame
                 </h2>
                 <p className="text-orange-100 text-sm sm:text-base font-medium">
@@ -259,7 +259,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameFilter }) => {
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center space-x-3 mb-2">
                             <p
-                              className={`text-base sm:text-xl font-bold truncate ${
+                              className={`text-sm sm:text-lg font-bold truncate ${
                                 isPodium
                                   ? "text-orange-900"
                                   : isCurrentUser
@@ -300,7 +300,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameFilter }) => {
                               <span className="hidden sm:inline">Champion</span>
                             </span>
                           )}
-                          <p className="text-slate-500 text-sm mt-1">
+                          <p className="text-slate-500 text-xs mt-1">
                             {new Date(score.created_at).toLocaleDateString(
                               "en-US",
                               {
@@ -314,14 +314,14 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameFilter }) => {
 
                       <div className="text-right shrink-0">
                         <div
-                          className={`text-2xl sm:text-4xl font-bold mb-2 clay-text-shadow ${getScoreColor(score.score, score.game_type)}`}
+                          className={`text-xl sm:text-3xl font-bold mb-2 clay-text-shadow ${getScoreColor(score.score, score.game_type)}`}
                         >
                           {score.game_type === "balloon_pop"
                             ? Math.floor(score.score)
                             : score.score.toFixed(1)}
                           {getScoreUnit(score.game_type)}
                         </div>
-                        <div className="text-slate-500 text-sm sm:text-base font-semibold">
+                        <div className="text-slate-400 text-xs sm:text-sm font-semibold">
                           {score.game_type === "balloon_pop"
                             ? score.score >= 50
                               ? "Amazing"
@@ -348,7 +348,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameFilter }) => {
         </div>
 
         <div className="bg-gradient-to-r from-slate-100 to-orange-50 px-6 sm:px-8 py-5 border-t border-slate-200/50">
-          <div className="flex flex-col sm:flex-row items-center justify-between text-sm text-slate-600">
+          <div className="flex flex-col sm:flex-row items-center justify-between text-xs text-slate-600">
             <div className="flex items-center space-x-4 mb-2 sm:mb-0">
               <span className="flex items-center space-x-2">
                 <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
