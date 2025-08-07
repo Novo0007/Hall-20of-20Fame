@@ -14,12 +14,18 @@ type GameType = "perfect_circle" | "balloon_pop";
 const GameContent: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>("games");
   const [currentGame, setCurrentGame] = useState<GameType>("perfect_circle");
+  const [leaderboardFilter, setLeaderboardFilter] = useState<string>("all");
   const { userBestScore } = useUser();
   const { isDark } = useTheme();
 
   const handleGameSelect = (game: GameType) => {
     setCurrentGame(game);
     setCurrentView(game);
+  };
+
+  const showLeaderboardForGame = (gameType: string) => {
+    setLeaderboardFilter(gameType);
+    setCurrentView("leaderboard");
   };
 
   return (
@@ -134,7 +140,7 @@ const GameContent: React.FC = () => {
               </button>
             </div>
             <PerfectCircle
-              onShowLeaderboard={() => setCurrentView("leaderboard")}
+              onShowLeaderboard={() => showLeaderboardForGame("perfect_circle")}
             />
           </div>
         </div>
@@ -151,7 +157,7 @@ const GameContent: React.FC = () => {
               </button>
             </div>
             <BalloonGame
-              onShowLeaderboard={() => setCurrentView("leaderboard")}
+              onShowLeaderboard={() => showLeaderboardForGame("balloon_pop")}
             />
           </div>
         </div>
@@ -159,7 +165,7 @@ const GameContent: React.FC = () => {
         <div className="pb-16">
           {/* Leaderboard View */}
           <div className="pt-4">
-            <Leaderboard />
+            <Leaderboard gameFilter={leaderboardFilter} />
           </div>
 
           {/* Back to Games Button */}
