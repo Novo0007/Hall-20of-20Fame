@@ -321,7 +321,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameFilter }) => {
                             : score.score.toFixed(1)}
                           {getScoreUnit(score.game_type)}
                         </div>
-                        <div className="text-slate-500 text-xs sm:text-sm font-semibold">
+                        <div className="text-slate-400 text-xs sm:text-sm font-semibold">
                           {score.game_type === "balloon_pop"
                             ? score.score >= 50
                               ? "Amazing"
